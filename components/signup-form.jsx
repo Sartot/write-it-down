@@ -21,6 +21,9 @@ import { redirect } from 'next/navigation'
 
 
 const formSchema = z.object({
+    name: z.string().min(1, {
+        message: "Required field"
+    }),
     email: z.string().min(1, {
         message: "Required field"
     }).email("Invalid e-mail"),
@@ -29,7 +32,7 @@ const formSchema = z.object({
     })
 })
 
-export default function LoginForm() {
+export default function SignUpForm() {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -41,10 +44,12 @@ export default function LoginForm() {
     async function onSubmit(values) {
         let email = values.email;
         let pwd = values.pwd;
+        let name = values.name;
 
-        const { data, error } = await authClient.signIn.email({
+        const { data, error } = await authClient.signUp.email({
             email: email,
             password: pwd,
+            name: name
         }, {
             onRequest: (ctx) => {
                 //show loading
@@ -62,7 +67,23 @@ export default function LoginForm() {
     return (
         <div className="w-full">
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-42">
+                    <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Username</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="" {...field} />
+                                </FormControl>
+                                <FormDescription>
+                                </FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    
                     <FormField
                         control={form.control}
                         name="email"
