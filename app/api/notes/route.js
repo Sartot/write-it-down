@@ -48,7 +48,7 @@ export async function POST(request){
 
         connection.end();
         const response = {
-            returnedStatus: 200,
+            returnedStatus: 201,
         }
         return NextResponse.json(response);
     }catch(err){
@@ -56,9 +56,26 @@ export async function POST(request){
 
         const response = {
             error: err.message,
-            returnedStatus: 200,
+            returnedStatus: 500,
         }
 
         return NextResponse.json(response, { status: 200 })
+    }
+}
+
+
+export async function PUT(request){
+    try{
+        const connection = await mysql.createConnection(connectionParams)
+        const req_body = await request.json();
+        const id = req_body.id;
+        const title = req_body.title;
+        const content = req_body.content;
+        const updatedAt = require('moment')().format('YYYY-MM-DD HH:mm:ss');
+
+        const result = await connection.execute("UPDATE note SET content = ?, updatedAt = ? where id = ?", [content, updatedAt, id]);
+        return NextResponse.json({ result }, { status: 200 });
+    }catch(err){
+        return NextResponse.json({ err }, { status: 500 });
     }
 }
