@@ -7,7 +7,7 @@ export default function NoteCard({ note, active, onClick }){
 
     return (
         <div 
-            className={`text-white px-4 py-6 border-t-2 border-b-2 ${active ? "bg-neutral-700" : ""}`}
+            className={`text-white px-4 py-6 border-b-2 border-y-neutral-600 ${active ? "bg-neutral-700" : ""}`}
             onClick={onClick}
         >
             <p className="text-lg font-semibold">{ note.title }</p>

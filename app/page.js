@@ -43,8 +43,8 @@ export default function Home() {
     }
 
     return (
-        <main className="flex justify-between items-center bg-neutral-900 h-svh">
-            <div className="w-3/12 h-full border-r-2 border-x-neutral-500">
+        <main className="flex justify-between items-stretch bg-neutral-900 min-h-svh">
+            <div className="w-3/12 h-inherit border-r-2 border-x-neutral-600">
                 {notes.map((note, i) => (
                     <NoteCard 
                         key={note.id} 
@@ -54,7 +54,7 @@ export default function Home() {
                     />
                 ))}
             </div>
-            <div className="w-8/12 h-full bg-slate-50">
+            <div className="w-8/12 h-inherit bg-slate-50">
                 {notes.length ? (
                     <TextEditor noteId={currentNote.id} content={currentNote.content} />
                 ) : (
