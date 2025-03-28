@@ -3,7 +3,7 @@ import { Undo, Redo, Bold, AlignLeft, AlignRight, AlignCenter } from "lucide-rea
 
 export default function EditorMenu({ editor }) {
     return (
-        <div className="w-full">
+        <div className="w-full text-black flex gap-x-3">
             <Button
                 onClick={() => editor.chain().focus().toggleBold().run()}
                 variant="outline"

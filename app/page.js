@@ -4,6 +4,8 @@ import TextEditor from "@/components/TextEditor";
 import { authClient } from "@/lib/auth-client"
 import { useState, useEffect } from "react";
 import NoteCard from "@/components/ui/note-card";
+import { PenLine } from "lucide-react"
+import { Button, buttonVariants } from "@/components/ui/button";
 
 
 export default function Home() { 
@@ -19,7 +21,7 @@ export default function Home() {
             })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data)
+                // console.log(data)
                 setNotes(data);
                 setCurrentNote(data[0]);
             })
@@ -45,16 +47,26 @@ export default function Home() {
     return (
         <main className="flex justify-between items-stretch bg-neutral-900 min-h-svh">
             <div className="w-3/12 h-inherit border-r-2 border-x-neutral-600">
-                {notes.map((note, i) => (
-                    <NoteCard 
-                        key={note.id} 
-                        note={note} 
-                        // active={ i == 0 ? true : false } 
-                        onClick={() => switchNote(note.id)}
-                    />
-                ))}
+                <div className="flex justify-end">
+                    <Button
+                        variant="outline"
+                        size="icon"
+                    >
+                        <PenLine />
+                    </Button>
+                </div>
+                <div>
+                    {notes.map((note, i) => (
+                        <NoteCard 
+                            key={note.id} 
+                            note={note} 
+                            // active={ i == 0 ? true : false } 
+                            onClick={() => switchNote(note.id)}
+                        />
+                    ))}
+                </div>
             </div>
-            <div className="w-8/12 h-inherit bg-slate-50">
+            <div className="w-9/12 h-inherit text-white">
                 {notes.length ? (
                     <TextEditor noteId={currentNote.id} content={currentNote.content} />
                 ) : (
