@@ -14,6 +14,7 @@ import {
 import { Button } from "./button";
 import { PenLine } from "lucide-react";
 import NoteCard from "./note-card";
+import NoteCardSkeleton from "./note-card-skeleton";
 
 export default function AppSidebar({ notes, setCurrentNote }){
     async function fetchNote(noteId) {
@@ -47,12 +48,23 @@ export default function AppSidebar({ notes, setCurrentNote }){
                     <SidebarGroupLabel>Modifica nota</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {notes.map((note) => (
-                                <SidebarMenuItem key={note.id}>
-                                    <NoteCard note={note} onClick={() => switchNote(note.id)}/>
-                                    <SidebarSeparator />
-                                </SidebarMenuItem>
-                            ))}
+                            {
+                                notes.length ? (
+                                    notes.map((note) => (
+                                        <SidebarMenuItem key={note.id}>
+                                            <NoteCard note={note} onClick={() => switchNote(note.id)}/>
+                                            <SidebarSeparator />
+                                        </SidebarMenuItem>
+                                    ))
+                                ) : (
+                                    Array.from({ length: 5 }).map((_, index) => (
+                                        <SidebarMenuItem key={index}>
+                                          <NoteCardSkeleton />
+                                          <SidebarSeparator />
+                                        </SidebarMenuItem>
+                                    ))
+                                )
+                            }
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
