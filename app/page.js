@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 import NoteCard from "@/components/ui/note-card";
 import { PenLine } from "lucide-react"
 import { Button, buttonVariants } from "@/components/ui/button";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import AppSidebar from "@/components/ui/app-sidebar";
 
 
 export default function Home() { 
@@ -30,48 +32,22 @@ export default function Home() {
         fetchNotes();
     }, [])
 
-    async function fetchNote(noteId) {
-        return fetch("/api/notes/" + noteId);
-    }
-
-    function switchNote(noteId){
-        console.log("clicked " + noteId);
-        fetchNote(noteId)
-        .then((res) => res.json())
-        .then((data) => {
-            const note = data.results[0];
-            setCurrentNote(note)
-        })
-    }
-
     return (
-        <main className="flex justify-between items-stretch bg-neutral-900 min-h-svh">
-            <div className="w-3/12 h-inherit border-r-2 border-x-neutral-600">
-                <div className="flex justify-end">
-                    <Button
-                        variant="outline"
-                        size="icon"
-                    >
-                        <PenLine />
-                    </Button>
-                </div>
-                <div>
-                    {notes.map((note, i) => (
-                        <NoteCard 
-                            key={note.id} 
-                            note={note} 
-                            // active={ i == 0 ? true : false } 
-                            onClick={() => switchNote(note.id)}
-                        />
-                    ))}
-                </div>
-            </div>
-            <div className="w-9/12 h-inherit text-white">
-                {notes.length ? (
-                    <TextEditor noteId={currentNote.id} content={currentNote.content} />
-                ) : (
-                    <div>Caricamento...</div>
-                )}
+        <main className="">
+            <div className="flex justify-between items-stretch bg-sidebar min-h-svh dark">
+                <SidebarProvider>
+                    <AppSidebar notes={notes} setCurrentNote={setCurrentNote}/>
+                    <div>
+                        <SidebarTrigger />
+                        <div className="h-inherit text-white">
+                            {notes.length ? (
+                                <TextEditor noteId={currentNote.id} content={currentNote.content} />
+                            ) : (
+                                <div>Caricamento...</div>
+                            )}
+                        </div>
+                    </div>
+                </SidebarProvider>
             </div>
         </main>
     );
