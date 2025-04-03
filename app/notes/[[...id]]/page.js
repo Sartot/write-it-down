@@ -7,7 +7,6 @@ import TextEditor from "@/components/TextEditor";
 export default function NotePage({ params }) {
     const { id } = React.use(params);
     const [note, setNote] = useState(null);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (id) {
@@ -19,15 +18,12 @@ export default function NotePage({ params }) {
                 .catch((err) => {
                     console.error("Error fetching note:", err);
                 })
-                .finally(() => {
-                    setLoading(false);
-                });
         }
     }, [id]);
 
     return (
         <div className="h-inherit text-white">
-            <TextEditor noteId={note?.id} content={note?.content} />
+            <TextEditor note={note} />
         </div>
     );
 }

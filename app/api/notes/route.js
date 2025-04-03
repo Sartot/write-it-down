@@ -44,7 +44,7 @@ export async function POST(request){
         const connection = await mysql.createConnection(connectionParams);
 
         const req_body = await request.json();
-        await connection.execute("INSERT INTO note (user_id, title, content) VALUES (?, ?, ?)", [req_body.user_id, req_body.title, req_body.content]);
+        await connection.execute("INSERT INTO note (user_id, id, title, content) VALUES (?, ?, ?, ?)", [req_body.user_id, req_body.id, req_body.title, req_body.content]);
 
         connection.end();
         const response = {
@@ -69,13 +69,28 @@ export async function PUT(request){
         const connection = await mysql.createConnection(connectionParams)
         const req_body = await request.json();
         const id = req_body.id;
-        const title = req_body.title;
-        const content = req_body.content;
+        const title = req_body?.title;
+        const content = req_body?.content;
         const updatedAt = require('moment')().format('YYYY-MM-DD HH:mm:ss');
 
-        const result = await connection.execute("UPDATE note SET content = ?, updatedAt = ? where id = ?", [content, updatedAt, id]);
+        var fields = [];
+        var values = [];
+        if(title){
+            fields.push('title = ?');
+            values.push(title);
+        }
+        if(content){
+            fields.push('content = ?');
+            values.push(content);
+        }
+
+        values.push(updatedAt);
+        values.push(id);
+
+        const result = await connection.execute("UPDATE note SET " + fields.join(", ") + ", updatedAt = ? where id = ?", values);
         return NextResponse.json({ result }, { status: 200 });
     }catch(err){
+        console.log(err);
         return NextResponse.json({ err }, { status: 500 });
     }
 }

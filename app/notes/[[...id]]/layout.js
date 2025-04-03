@@ -23,16 +23,14 @@ export default async function DashboardLayout({children, params}){
     const notes = await fetchNotes();
 
     return (
-        <main className="">
-            <div className="flex justify-between items-stretch bg-sidebar min-h-svh dark">
-                <SidebarProvider>
-                    <AppSidebar notes={notes} selectedId={id}/>
-                    <div className="w-full">
-                        <SidebarTrigger />
-                        {children}
-                    </div>
-                </SidebarProvider>
-            </div>
-        </main>
+        <div className="flex justify-between items-stretch bg-sidebar min-h-svh">
+            <SidebarProvider>
+                <AppSidebar notes={notes} selectedId={id}/>
+                <div className="w-full">
+                    <SidebarTrigger />
+                    {children}
+                </div>
+            </SidebarProvider>
+        </div>
     )
 }

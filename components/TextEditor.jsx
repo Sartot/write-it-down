@@ -6,12 +6,17 @@ import TextAlign from "@tiptap/extension-text-align";
 import FileHandler from "@tiptap-pro/extension-file-handler";
 import Image from '@tiptap/extension-image'
 import { useRef, useState, useEffect } from "react";
+import { authClient } from "@/lib/auth-client";
 
+import { Input } from "@/components/ui/input";
 import EditorMenu from "@/components/EditorMenu";
 
-export default function TextEditor({ noteId, content }) {
+import { v4 } from "uuid";
+
+export default function TextEditor({ note }) {
     const updateTimeoutRef = useRef(null);
     const [isSaving, setSaving] = useState(false);
+    const titleRef = useRef(note?.title);
 
     const editor = useEditor({
         extensions: [
@@ -68,17 +73,21 @@ export default function TextEditor({ noteId, content }) {
             }),
         ],
         immediatelyRender: false,
-        content: content, // Imposta il contenuto iniziale
+        content: note?.content, // Imposta il contenuto iniziale
         autofocus: true,
         onUpdate: updateHandler,
     });
 
     // Effetto per aggiornare il contenuto quando cambia la prop `content`
     useEffect(() => {
-        if (editor && content) {
-            editor.commands.setContent(content); // Aggiorna il contenuto dell'editor
+        if (editor && note?.content) {
+            editor.commands.setContent(note.content); // Aggiorna il contenuto dell'editor
         }
-    }, [content, editor]);
+    }, [note]);
+
+    useEffect(() => {
+        titleRef.current.value = (note?.title ? note.title : "");
+    }, [note])
 
     // Auto-save after 2s
     function updateHandler() {
@@ -87,39 +96,84 @@ export default function TextEditor({ noteId, content }) {
             updateTimeoutRef.current = null;
         }
 
-        updateTimeoutRef.current = setTimeout(() => {
+        updateTimeoutRef.current = setTimeout(async () => {
             setSaving(true);
 
-            const request_body = JSON.stringify({
-                id: noteId,
-                content: editor.getHTML(),
-            });
-
-            fetch("/api/notes", {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: request_body,
-            })
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("Nota aggiornata con successo:", data);
-            })
-            .catch((error) => {
-                console.error("Errore durante l'aggiornamento della nota:", error);
-            })
-            .finally(() => {
-                setSaving(false);
-            });
+            if(note){
+                updateNote(note.id, titleRef.current.value, editor.getHTML());
+            }else{
+                var {data: session} = await authClient.getSession();
+                createNote(session.user.id, titleRef.current.value, editor.getHTML());
+            }
 
             updateTimeoutRef.current = null;
         }, 2000);
     }
 
+    function createNote(user_id, title, content){
+        const request_body = JSON.stringify({
+            user_id: user_id,
+            id: v4(),
+            title: title,
+            content: content,
+        });
+        console.log(request_body);
+
+        fetch("/api/notes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: request_body,
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log("Nota aggiornata con successo:", data);
+        })
+        .catch((error) => {
+            console.error("Errore durante l'aggiornamento della nota:", error);
+        })
+        .finally(() => {
+            setSaving(false);
+        });
+    }
+
+    function updateNote(id, title, content){
+        const request_body = JSON.stringify({
+            id: id,
+            title: title,
+            content: content,
+        });
+
+        fetch("/api/notes", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: request_body,
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log("Nota aggiornata con successo:", data);
+        })
+        .catch((error) => {
+            console.error("Errore durante l'aggiornamento della nota:", error);
+        })
+        .finally(() => {
+            setSaving(false);
+        });
+    }
+
     return (
         <div className="h-full px-5 py-4">
-            <div className="pb-6 text-slate-600">
+            <Input 
+                ref={titleRef}
+                placeholder="Title"
+                type="text"
+                className="max-w-60 md:text-xl border-0 border-b-2 rounded-none outline-none focus-visible:ring-0"
+                onChange={updateHandler}
+            />
+            <div className="py-6 text-slate-600">
                 {isSaving ? "Saving..." : "Saved"}
             </div>
             <div className="py-4">
