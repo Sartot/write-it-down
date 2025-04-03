@@ -11,12 +11,12 @@ import {
     SidebarGroupAction,
     SidebarSeparator
 } from "./sidebar";
-import { Button } from "./button";
 import { PenLine } from "lucide-react";
 import NoteCard from "./note-card";
 import NoteCardSkeleton from "./note-card-skeleton";
 
-export default function AppSidebar({ notes, setCurrentNote }){
+
+export default function AppSidebar({ notes }){
     async function fetchNote(noteId) {
         return fetch("/api/notes/" + noteId);
     }
@@ -49,10 +49,10 @@ export default function AppSidebar({ notes, setCurrentNote }){
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {
-                                notes.length ? (
+                                notes && notes.length ? (
                                     notes.map((note) => (
                                         <SidebarMenuItem key={note.id}>
-                                            <NoteCard note={note} onClick={() => switchNote(note.id)}/>
+                                            <NoteCard note={note} onClick={() => console.log("click")}/>
                                             <SidebarSeparator />
                                         </SidebarMenuItem>
                                     ))
