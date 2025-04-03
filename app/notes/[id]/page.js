@@ -27,11 +27,7 @@ export default function NotePage({ params }) {
 
     return (
         <div className="h-inherit text-white">
-            {note ? (
-                <TextEditor noteId={note.id} content={note.content} />
-            ) : (
-                <div>Caricamento...</div>
-            )}
+            <TextEditor noteId={note?.id} content={note?.content} />
         </div>
     );
 }

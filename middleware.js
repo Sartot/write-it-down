@@ -1,10 +1,16 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
+import { cookies } from 'next/headers'
 
-export function middleware(request){
-    // console.log(request.cookies.getAll());
-    // return NextResponse.redirect(new URL("/login", request.url));
+export async function middleware(request) {
+    const sessionCookie = (await cookies()).get("better-auth.session_token");
+ 
+	if (!sessionCookie) {
+		return NextResponse.redirect(new URL("/login", request.url));
+	}
+ 
+	return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/']
-}
+    matcher: ["/", "/notes/(.+)"], // Apply middleware to the root route
+};

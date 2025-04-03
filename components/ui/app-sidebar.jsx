@@ -14,23 +14,10 @@ import {
 import { PenLine } from "lucide-react";
 import NoteCard from "./note-card";
 import NoteCardSkeleton from "./note-card-skeleton";
+import Link from 'next/link'
 
 
-export default function AppSidebar({ notes }){
-    async function fetchNote(noteId) {
-        return fetch("/api/notes/" + noteId);
-    }
-
-    function switchNote(noteId){
-        console.log("clicked " + noteId);
-        fetchNote(noteId)
-        .then((res) => res.json())
-        .then((data) => {
-            const note = data.results[0];
-            setCurrentNote(note)
-        })
-    }
-
+export default function AppSidebar({ notes, selectedId }){
     return (
         <Sidebar>
             <SidebarHeader>
@@ -52,7 +39,11 @@ export default function AppSidebar({ notes }){
                                 notes && notes.length ? (
                                     notes.map((note) => (
                                         <SidebarMenuItem key={note.id}>
-                                            <NoteCard note={note} onClick={() => console.log("click")}/>
+                                            <Link
+                                                href={`/notes/${note.id}`}
+                                            >
+                                                <NoteCard note={note} active={note.id == selectedId}/>
+                                            </Link>
                                             <SidebarSeparator />
                                         </SidebarMenuItem>
                                     ))

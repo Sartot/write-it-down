@@ -18,10 +18,10 @@ export async function GET(request) {
     get_exp_query = 'SELECT * FROM note where user_id = ?'
 
     let user = request.nextUrl.searchParams.get("user_id");
-    console.log(user);
+    // console.log(user);
     let values = [user]
     const [results] = await connection.execute(get_exp_query, values)
-    console.log(results);
+    // console.log(results);
     connection.end()
 
     return NextResponse.json(results)

@@ -8,10 +8,10 @@ export default async function DashboardLayout({children, params}){
 
     async function fetchNotes(){
         const { session } = await auth.api.getSession({
-            headers: headers(), // pass the headers
+            headers: await headers(), // pass the headers
         }); 
 
-        fetch(process.env.URL+'/api/notes?user_id='+session.userId, {
+        return fetch(process.env.URL+'/api/notes?user_id='+session.userId, {
             method: "GET",
         })
         .then((res) => res.json())
@@ -21,14 +21,13 @@ export default async function DashboardLayout({children, params}){
     }
 
     const notes = await fetchNotes();
-    console.log("notes: " + notes);
 
     return (
         <main className="">
             <div className="flex justify-between items-stretch bg-sidebar min-h-svh dark">
                 <SidebarProvider>
-                    <AppSidebar notes={notes}/>
-                    <div>
+                    <AppSidebar notes={notes} selectedId={id}/>
+                    <div className="w-full">
                         <SidebarTrigger />
                         {children}
                     </div>

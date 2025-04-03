@@ -1,4 +1,4 @@
-export default function NoteCard({ note, active, onClick }){
+export default function NoteCard({ note, active }){
     var content = note.content.replace(/<[^>]+>/g, '');
     const maxChars = 20;
     if(content.length > maxChars){
@@ -8,7 +8,6 @@ export default function NoteCard({ note, active, onClick }){
     return (
         <div 
             className={`text-white px-4 py-6 border-y-neutral-600 hover:bg-neutral-800 cursor-pointer ${active ? "bg-neutral-800" : ""}`}
-            onClick={onClick}
         >
             <p className="text-lg font-semibold">{ note.title }</p>
             <div>{ content }</div>

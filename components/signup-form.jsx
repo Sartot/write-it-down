@@ -49,7 +49,8 @@ export default function SignUpForm() {
         const { data, error } = await authClient.signUp.email({
             email: email,
             password: pwd,
-            name: name
+            name: name,
+            callbackURL: '/'
         }, {
             onRequest: (ctx) => {
                 //show loading
