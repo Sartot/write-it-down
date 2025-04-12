@@ -1,25 +1,21 @@
 "use client"
-import { useEffect, useState } from "react";
+
 import React from "react";
 import TextEditor from "@/components/TextEditor";
+import { useSidebar } from "@/components/ui/sidebar";
 
 
 export default function NotePage({ params }) {
     const { id } = React.use(params);
-    const [note, setNote] = useState(null);
+    // const [note, setNote] = useState(null);
 
-    useEffect(() => {
-        if (id) {
-            fetch(`/api/notes/${id}`)
-                .then((res) => res.json())
-                .then((data) => {
-                    setNote(data.results[0]);
-                })
-                .catch((err) => {
-                    console.error("Error fetching note:", err);
-                })
-        }
-    }, [id]);
+    const sidebarContext = useSidebar();
+    const notes = sidebarContext.notes;
+    
+    const note = notes.find((value) => {
+        return value.id == id
+    })
+
 
     return (
         <div className="h-inherit text-white">

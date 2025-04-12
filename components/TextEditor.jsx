@@ -13,10 +13,10 @@ import EditorMenu from "@/components/EditorMenu";
 
 import { v4 } from "uuid";
 
-export default function TextEditor({ note }) {
+export default function TextEditor({ note, isLoading }) {
     const updateTimeoutRef = useRef(null);
     const [isSaving, setSaving] = useState(false);
-    const titleRef = useRef(note?.title);
+    const titleRef = useRef(note.title);
 
     const editor = useEditor({
         extensions: [
@@ -80,14 +80,12 @@ export default function TextEditor({ note }) {
 
     // Effetto per aggiornare il contenuto quando cambia la prop `content`
     useEffect(() => {
-        if (editor && note?.content) {
-            editor.commands.setContent(note.content); // Aggiorna il contenuto dell'editor
+        if (!isLoading && editor && note?.content) {
+            editor.commands.setContent(note?.content); // Aggiorna il contenuto dell'editor
         }
-    }, [note]);
 
-    useEffect(() => {
         titleRef.current.value = (note?.title ? note.title : "");
-    }, [note])
+    }, [note]);
 
     // Auto-save after 2s
     function updateHandler() {
@@ -117,7 +115,6 @@ export default function TextEditor({ note }) {
             title: title,
             content: content,
         });
-        console.log(request_body);
 
         fetch("/api/notes", {
             method: "POST",

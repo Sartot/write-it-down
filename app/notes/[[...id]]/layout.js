@@ -13,6 +13,7 @@ export default async function DashboardLayout({children, params}){
 
         return fetch(process.env.URL+'/api/notes?user_id='+session.userId, {
             method: "GET",
+            cache: 'force-cache'
         })
         .then((res) => res.json())
         .then((data) => {
@@ -24,7 +25,7 @@ export default async function DashboardLayout({children, params}){
 
     return (
         <div className="flex justify-between items-stretch bg-sidebar min-h-svh">
-            <SidebarProvider>
+            <SidebarProvider notes={notes}>
                 <AppSidebar notes={notes} selectedId={id}/>
                 <div className="w-full">
                     <SidebarTrigger />
