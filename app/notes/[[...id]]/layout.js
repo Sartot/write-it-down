@@ -31,7 +31,7 @@ export default async function DashboardLayout({children, params}){
         <div className="flex justify-between items-stretch bg-sidebar min-h-svh">
             <SidebarProvider notes={notes}>
                 <AppSidebar notes={notes} selectedId={id}/>
-                <div className="w-full">
+                <div className="w-full flex flex-col">
                     <SidebarTrigger />
                     {children}
                 </div>

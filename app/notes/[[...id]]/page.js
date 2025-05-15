@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import TextEditor from "@/components/TextEditor";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useRouter } from 'next/navigation'
+import { Button } from "@/components/ui/button";
 
 export default function NotePage({ params }) {
     const { id } = React.use(params);
@@ -25,7 +26,7 @@ export default function NotePage({ params }) {
     const note = notes.find((value) => value.id == id);
 
     return (
-        <div className="h-inherit text-white">
+        <div className="flex-grow text-white relative">
             <TextEditor note={note} />
         </div>
     );

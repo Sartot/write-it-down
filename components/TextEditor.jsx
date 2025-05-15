@@ -10,13 +10,33 @@ import { authClient } from "@/lib/auth-client";
 
 import { Input } from "@/components/ui/input";
 import EditorMenu from "@/components/EditorMenu";
+import { Button } from "@/components/ui/button"
 
 import { v4 } from "uuid";
+
+import { GoogleGenAI, Type } from "@google/genai";
+
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+
 
 export default function TextEditor({ note, isLoading }) {
     const updateTimeoutRef = useRef(null);
     const [isSaving, setSaving] = useState(false);
     const titleRef = useRef(note.title);
+    const [open, setOpen] = useState(false);
+
+    const [topic, setTopic] = useState("");
+    const [questions, setQuestions] = useState([]);
+
+    const ai = new GoogleGenAI({ apiKey: "AIzaSyCdAzXQMHFi3nYLpLsNMCK1m85IWwQ1dlM" });
 
     const editor = useEditor({
         extensions: [
@@ -161,6 +181,44 @@ export default function TextEditor({ note, isLoading }) {
         });
     }
 
+
+    async function askAI(){
+        const response = await ai.models.generateContent({
+            model: "gemini-2.0-flash",
+            contents: editor.getHTML(),
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: {
+                    type: Type.ARRAY,
+                    items: {
+                        type: Type.OBJECT,
+                        properties: {
+                            topic: {
+                                type: Type.STRING
+                            },
+                            questions: {
+                                type: Type.ARRAY,
+                                items: {
+                                    type: Type.STRING
+                                }
+                            },
+                        },
+                        propertyOrdering: ["topic", "questions"],
+                    }
+                },
+                systemInstruction: `You are an assistant that helps student study a subject based on their notes. 
+                You will receive the notes related to a topic, your goal is to generate questions about it to help them study in the
+                notes language.`,
+            },
+        });
+
+        const data = JSON.parse(response.text);
+        console.log(data);
+        setTopic(data[0].topic);
+        setQuestions(data[0].questions);
+        setOpen(true);
+    }
+
     return (
         <div className="h-full px-5 py-4">
             <Input 
@@ -179,6 +237,30 @@ export default function TextEditor({ note, isLoading }) {
             <div className="">
                 <EditorContent editor={editor} />
             </div>
+
+            <Button
+                className="absolute bottom-8 right-8"
+                onClick={askAI}
+            >
+                Ask AI
+            </Button>
+
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>{topic}</DialogTitle>
+                        <DialogDescription>Answer the following questions</DialogDescription>
+                    </DialogHeader>
+                    <ol className="list-decimal">
+                        {questions.map((question, i) => {
+                            return (
+                                <li key={i} className="ml-4 mb-6">{question}</li>
+                            )
+                        })}
+                    </ol>
+                </DialogContent>
+            </Dialog>
+
         </div>
     );
 }
