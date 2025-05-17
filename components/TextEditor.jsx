@@ -12,6 +12,23 @@ import { Input } from "@/components/ui/input";
 import EditorMenu from "@/components/EditorMenu";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { 
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import { Textarea } from "@/components/ui/textarea"
+
 
 import { v4 } from "uuid";
 
@@ -258,13 +275,26 @@ export default function TextEditor({ note, isLoading }) {
                     {
                         questions.length ? 
                         (
-                            <ol className="list-decimal">
-                                {questions.map((question, i) => {
-                                    return (
-                                        <li key={i} className="ml-4 mb-6">{question}</li>
-                                    )
-                                })}
-                            </ol>
+                            <Carousel orientation="vertical">
+                                <CarouselContent className="h-[400px]">
+                                    {questions.map((question, i) => {
+                                        return (
+                                            <CarouselItem key={i}>
+                                                <Card className="h-full flex flex-col">
+                                                    <CardHeader>
+                                                        <CardTitle>{i+1}. {question}</CardTitle>
+                                                    </CardHeader>
+                                                    <CardContent className="grow">
+                                                        <Textarea className="resize-none h-full" placeholder="Type your answer here."/>
+                                                    </CardContent>
+                                                </Card>
+                                            </CarouselItem>
+                                        )
+                                    })}
+                                </CarouselContent>
+                                <CarouselPrevious />
+                                <CarouselNext />
+                            </Carousel>
                         ) : 
                         (
                             <div>
