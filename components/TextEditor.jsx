@@ -275,7 +275,8 @@ export default function TextEditor({ note, isLoading }) {
                     {
                         questions.length ? 
                         (
-                            <Carousel orientation="vertical">
+                            <Carousel orientation="vertical" className="my-10">
+                                <CarouselPrevious/>
                                 <CarouselContent className="h-[400px]">
                                     {questions.map((question, i) => {
                                         return (
@@ -292,8 +293,7 @@ export default function TextEditor({ note, isLoading }) {
                                         )
                                     })}
                                 </CarouselContent>
-                                <CarouselPrevious />
-                                <CarouselNext />
+                                <CarouselNext/>
                             </Carousel>
                         ) : 
                         (
