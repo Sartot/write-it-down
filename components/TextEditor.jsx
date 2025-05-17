@@ -10,7 +10,8 @@ import { authClient } from "@/lib/auth-client";
 
 import { Input } from "@/components/ui/input";
 import EditorMenu from "@/components/EditorMenu";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { v4 } from "uuid";
 
@@ -183,6 +184,8 @@ export default function TextEditor({ note, isLoading }) {
 
 
     async function askAI(){
+        setOpen(true);
+
         const response = await ai.models.generateContent({
             model: "gemini-2.0-flash",
             contents: editor.getHTML(),
@@ -216,7 +219,6 @@ export default function TextEditor({ note, isLoading }) {
         console.log(data);
         setTopic(data[0].topic);
         setQuestions(data[0].questions);
-        setOpen(true);
     }
 
     return (
@@ -248,16 +250,34 @@ export default function TextEditor({ note, isLoading }) {
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>{topic}</DialogTitle>
+                        <DialogTitle>{topic ? topic : (
+                            <Skeleton className="w-[200px] h-[20px] rounded-full"></Skeleton>
+                        )}</DialogTitle>
                         <DialogDescription>Answer the following questions</DialogDescription>
                     </DialogHeader>
-                    <ol className="list-decimal">
-                        {questions.map((question, i) => {
-                            return (
-                                <li key={i} className="ml-4 mb-6">{question}</li>
-                            )
-                        })}
-                    </ol>
+                    {
+                        questions.length ? 
+                        (
+                            <ol className="list-decimal">
+                                {questions.map((question, i) => {
+                                    return (
+                                        <li key={i} className="ml-4 mb-6">{question}</li>
+                                    )
+                                })}
+                            </ol>
+                        ) : 
+                        (
+                            <div>
+                                <Skeleton className="w-[100px] h-[20px] rounded-full mb-5"></Skeleton>
+                                <Skeleton className="w-[200px] h-[20px] rounded-full mb-5"></Skeleton>
+                                <Skeleton className="w-[200px] h-[20px] rounded-full mb-5"></Skeleton>
+                                <Skeleton className="w-[100px] h-[20px] rounded-full mb-5"></Skeleton>
+                                <Skeleton className="w-[100px] h-[20px] rounded-full mb-5"></Skeleton>
+                                <Skeleton className="w-[200px] h-[20px] rounded-full mb-5"></Skeleton>
+                                <Skeleton className="w-[100px] h-[20px] rounded-full mb-5"></Skeleton>
+                            </div>
+                        )
+                    }
                 </DialogContent>
             </Dialog>
 
