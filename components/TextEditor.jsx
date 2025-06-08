@@ -54,6 +54,10 @@ export default function TextEditor({ note, isLoading }) {
     const [topic, setTopic] = useState("");
     const [questions, setQuestions] = useState([]);
 
+    const answersRef = useRef([]);
+    const [loadingAnswers, setLoadingAnswers] = useState(false);
+    const [answersData, setAnswersData] = useState([]);
+
     const ai = new GoogleGenAI({ apiKey: "AIzaSyCdAzXQMHFi3nYLpLsNMCK1m85IWwQ1dlM" });
 
     const editor = useEditor({
@@ -226,9 +230,17 @@ export default function TextEditor({ note, isLoading }) {
                         propertyOrdering: ["topic", "questions"],
                     }
                 },
-                systemInstruction: `You are an assistant that helps student study a subject based on their notes. 
-                You will receive the notes related to a topic, your goal is to generate questions about it to help them study in the
-                notes language.`,
+                systemInstruction: `
+                    You are an AI tutor designed to help students review and test their knowledge based on their study notes.
+                    You will receive a set of notes written by a student about a specific topic.
+                    Your task is to generate a list of clear and relevant questions that help the student actively recall and understand the content.
+                    The questions should:
+                    - Be based only on the provided notes.
+                    - Use the same language as the notes.
+                    - Vary in difficulty (easy to challenging).
+                    - Include a mix of factual, conceptual, and critical-thinking questions when possible.
+                    Do not include answers unless explicitly requested.
+                `,
             },
         });
 
@@ -237,6 +249,69 @@ export default function TextEditor({ note, isLoading }) {
         setTopic(data[0].topic);
         setQuestions(data[0].questions);
     }
+
+
+    async function checkAnswersAI(){
+        setLoadingAnswers(true);
+
+        var answersArr = questions.map((question, index) => ({
+            question: question,
+            student_answer: answersRef.current[index]?.value || ""
+        }));
+
+        const response = await ai.models.generateContent({
+            model: "gemini-2.0-flash",
+            contents: JSON.stringify(answersArr),
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: {
+                    type: Type.ARRAY,
+                    items: {
+                        type: Type.OBJECT,
+                        properties: {
+                            question: {
+                                type: Type.STRING
+                            },
+                            student_answer: {
+                                type: Type.STRING
+                            },
+                            evaluation: {
+                                type: Type.STRING,
+                            },
+                            score: {
+                                type: Type.NUMBER
+                            },
+                            explanation: {
+                                type: Type.STRING
+                            },
+                            study_tip: {
+                                type: Type.STRING
+                            }
+                        },
+                        propertyOrdering: ["question", "student_answer", "evaluation", "score", "explanation", "study_tip"],
+                    }
+                },
+                systemInstruction: `
+                    You are an AI tutor evaluating a student's answers to study questions based on their personal notes.
+                    You will receive a list of question/answer pairs provided by the student.
+                    For each pair:
+
+                    - Evaluate the correctness of the answer (correct / partially correct / incorrect).
+                    - Assign a score from 0 to 1 (1 = fully correct, 0.5 = partially correct, 0 = incorrect).
+                    - Provide a brief explanation or correction, if needed.
+                    - Suggest a specific study tip or resource to help the student better understand the topic.
+
+                    Base your evaluation strictly on the content of the questions and answers, without external assumptions. The language of the answers should be preserved.
+                    Output the results as a structured list in JSON format.
+                `,
+            },
+        });
+
+        const data = JSON.parse(response.text);
+        console.log(data);
+        setAnswersData(data);
+    }
+
 
     return (
         <div className="h-full px-5 py-4">
@@ -267,10 +342,18 @@ export default function TextEditor({ note, isLoading }) {
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>{topic ? topic : (
-                            <Skeleton className="w-[200px] h-[20px] rounded-full"></Skeleton>
-                        )}</DialogTitle>
-                        <DialogDescription>Answer the following questions</DialogDescription>
+                        <DialogTitle>
+                            {topic
+                                ? topic
+                                : <Skeleton className="w-[200px] h-[20px] rounded-full"></Skeleton>
+                            }
+                        </DialogTitle>
+                        <DialogDescription>
+                            {answersData && answersData.length 
+                                ? "Check your results" 
+                                : "Answer the following questions"
+                            }
+                        </DialogDescription>
                     </DialogHeader>
                     {
                         questions.length ? 
@@ -279,14 +362,41 @@ export default function TextEditor({ note, isLoading }) {
                                 <CarouselPrevious/>
                                 <CarouselContent className="h-[400px]">
                                     {questions.map((question, i) => {
+                                        var btn = null;
+                                        if(i == questions.length-1){
+                                            btn = (
+                                                <Button className={`mt-4`} onClick={checkAnswersAI} disabled={loadingAnswers}>
+                                                    {loadingAnswers ? "Loading..." : "Submit"}
+                                                </Button>
+                                            )
+                                        }
+
                                         return (
-                                            <CarouselItem key={i}>
+                                            <CarouselItem key={i} className="h-[400]">
                                                 <Card className="h-full flex flex-col">
                                                     <CardHeader>
                                                         <CardTitle>{i+1}. {question}</CardTitle>
                                                     </CardHeader>
-                                                    <CardContent className="grow">
-                                                        <Textarea className="resize-none h-full" placeholder="Type your answer here."/>
+                                                    <CardContent className="grow h-full flex flex-col">
+                                                        {
+                                                            answersData && answersData.length 
+                                                            ? (
+                                                                <div className="grow">
+                                                                    <div className="flex flex-col gap-5 h-full overflow-y-scroll">
+                                                                        <p>Your answer: {answersData[i].student_answer ? answersData[i].score : "N/A"}</p>
+                                                                        <p>Score: {answersData[i].score}</p>
+                                                                        <p>Evaluation: {answersData[i].evaluation}</p>
+                                                                        <p>Explanation: {answersData[i].explanation}</p>
+                                                                        <p>Tips: {answersData[i].study_tip}</p>
+                                                                    </div>
+                                                                </div>
+                                                            ) : (
+                                                                <>
+                                                                    <Textarea ref={el => answersRef.current[i] = el} className="user-answer resize-none grow" placeholder="Type your answer here."/>
+                                                                    {btn}
+                                                                </>
+                                                            )
+                                                        }
                                                     </CardContent>
                                                 </Card>
                                             </CarouselItem>

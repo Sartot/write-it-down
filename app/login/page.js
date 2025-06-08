@@ -11,7 +11,7 @@ import {
 
 export default function LoginPage(){
     return (
-        <main className="flex justify-center items-center h-svh">
+        <div className="flex justify-center items-center h-svh">
             <div className="w-2/12">
                 <Tabs defaultValue="login">
                     <TabsList className="grid grid-cols-2">
@@ -26,6 +26,6 @@ export default function LoginPage(){
                     </TabsContent>
                 </Tabs>
             </div>
-        </main>
+        </div>
     )
 }
