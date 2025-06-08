@@ -372,29 +372,35 @@ export default function TextEditor({ note, isLoading }) {
                                         }
 
                                         return (
-                                            <CarouselItem key={i} className="h-[400]">
+                                            <CarouselItem key={i} className="h-[400px]">
                                                 <Card className="h-full flex flex-col">
-                                                    <CardHeader>
+                                                    <CardHeader className="flex-shrink-0">
                                                         <CardTitle>{i+1}. {question}</CardTitle>
                                                     </CardHeader>
-                                                    <CardContent className="grow h-full flex flex-col">
+                                                    <CardContent className="flex-1 flex flex-col min-h-0">
                                                         {
                                                             answersData && answersData.length 
                                                             ? (
-                                                                <div className="grow">
-                                                                    <div className="flex flex-col gap-5 h-full overflow-y-scroll">
-                                                                        <p>Your answer: {answersData[i].student_answer ? answersData[i].score : "N/A"}</p>
-                                                                        <p>Score: {answersData[i].score}</p>
-                                                                        <p>Evaluation: {answersData[i].evaluation}</p>
-                                                                        <p>Explanation: {answersData[i].explanation}</p>
-                                                                        <p>Tips: {answersData[i].study_tip}</p>
-                                                                    </div>
+                                                                <div className="flex flex-col gap-5 overflow-y-auto flex-1">
+                                                                    <p><strong>Your answer:</strong> {answersData[i].student_answer || "N/A"}</p>
+                                                                    <p><strong>Score:</strong> {answersData[i].score}</p>
+                                                                    <p><strong>Evaluation:</strong> {answersData[i].evaluation}</p>
+                                                                    <p><strong>Explanation:</strong> {answersData[i].explanation}</p>
+                                                                    <p><strong>Tips:</strong> {answersData[i].study_tip}</p>
                                                                 </div>
                                                             ) : (
-                                                                <>
-                                                                    <Textarea ref={el => answersRef.current[i] = el} className="user-answer resize-none grow" placeholder="Type your answer here."/>
-                                                                    {btn}
-                                                                </>
+                                                                <div className="flex flex-col flex-1 min-h-0">
+                                                                    <Textarea 
+                                                                        ref={el => answersRef.current[i] = el} 
+                                                                        className="user-answer resize-none flex-1 min-h-0" 
+                                                                        placeholder="Type your answer here."
+                                                                    />
+                                                                    {btn && (
+                                                                        <div className="flex-shrink-0 mt-4">
+                                                                            {btn}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
                                                             )
                                                         }
                                                     </CardContent>
