@@ -20,6 +20,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+
 import {
   Carousel,
   CarouselContent,
@@ -29,11 +30,9 @@ import {
 } from "@/components/ui/carousel"
 import { Textarea } from "@/components/ui/textarea"
 
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 
 import { v4 } from "uuid";
-
-import { GoogleGenAI, Type } from "@google/genai";
-
 import { getAIQuestions, getAIEvaluation } from "@/lib/utils";
 
 import {
@@ -58,8 +57,6 @@ export default function TextEditor({ note, isLoading }) {
     const answersRef = useRef([]);
     const [loadingAnswers, setLoadingAnswers] = useState(false);
     const [answersData, setAnswersData] = useState([]);
-
-    const ai = new GoogleGenAI({ apiKey: "AIzaSyCdAzXQMHFi3nYLpLsNMCK1m85IWwQ1dlM" });
 
     const editor = useEditor({
         extensions: [
@@ -211,7 +208,7 @@ export default function TextEditor({ note, isLoading }) {
     async function askAI(){
         setOpen(true);
 
-        const response = getAIQuestions(editor.getHTML());
+        const response = await getAIQuestions(editor.getHTML());
 
         const data = JSON.parse(response.text);
         console.log(data);
@@ -228,8 +225,8 @@ export default function TextEditor({ note, isLoading }) {
             student_answer: answersRef.current[index]?.value || ""
         }));
 
-        const response = getAIEvaluation(JSON.stringify(answersArr));
-
+        const response = await getAIEvaluation(JSON.stringify(answersArr));
+        console.log(response);
         const data = JSON.parse(response.text);
         console.log(data);
         setAnswersData(data);
@@ -304,13 +301,16 @@ export default function TextEditor({ note, isLoading }) {
                                                         {
                                                             answersData && answersData.length 
                                                             ? (
-                                                                <div className="flex flex-col gap-5 overflow-y-auto flex-1">
-                                                                    <p><strong>Your answer:</strong> {answersData[i].student_answer || "N/A"}</p>
-                                                                    <p><strong>Score:</strong> {answersData[i].score}</p>
-                                                                    <p><strong>Evaluation:</strong> {answersData[i].evaluation}</p>
-                                                                    <p><strong>Explanation:</strong> {answersData[i].explanation}</p>
-                                                                    <p><strong>Tips:</strong> {answersData[i].study_tip}</p>
-                                                                </div>
+                                                                <ScrollArea>
+                                                                    <div className="flex flex-col gap-y-5">
+                                                                        <p><strong>Your answer:</strong> {answersData[i].student_answer || "N/A"}</p>
+                                                                        <p><strong>Score:</strong> {answersData[i].score}</p>
+                                                                        <p><strong>Evaluation:</strong> {answersData[i].evaluation}</p>
+                                                                        <p><strong>Explanation:</strong> {answersData[i].explanation}</p>
+                                                                        <p><strong>Tips:</strong> {answersData[i].study_tip}</p>
+                                                                    </div>
+                                                                    <ScrollBar />
+                                                                </ScrollArea>
                                                             ) : (
                                                                 <div className="flex flex-col flex-1 min-h-0">
                                                                     <Textarea 
@@ -319,7 +319,7 @@ export default function TextEditor({ note, isLoading }) {
                                                                         placeholder="Type your answer here."
                                                                     />
                                                                     {btn && (
-                                                                        <div className="flex-shrink-0 mt-4">
+                                                                        <div className="mt-4">
                                                                             {btn}
                                                                         </div>
                                                                     )}

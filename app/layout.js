@@ -3,28 +3,28 @@ import "./globals.css";
 
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+    variable: "--font-geist-sans",
+    subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+    variable: "--font-geist-mono",
+    subsets: ["latin"],
 });
 
 export const metadata = {
-  title: "Write It, Down",
-  description: "Note taking web app for students",
+    title: "Write It, Down",
+    description: "Note taking web app for students",
 };
 
 export default async function RootLayout({ children }) {
     return (
         <html lang="en">
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+                className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
             >
-                <main className="dark">
-                  {children}
+                <main>
+                    {children}
                 </main>
             </body>
         </html>
