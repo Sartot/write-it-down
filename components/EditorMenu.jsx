@@ -5,14 +5,6 @@ export default function EditorMenu({ editor }) {
     return (
         <div className="w-full flex gap-x-3">
             <Button
-                onClick={() => editor.chain().focus().toggleBold().run()}
-                variant="outline"
-                size="icon"
-            >
-                <Bold strokeWidth={4}/>
-            </Button>
-
-            <Button
                 onClick={() => editor.chain().focus().undo().run()}
                 variant="outline"
                 size="icon"
@@ -51,6 +43,16 @@ export default function EditorMenu({ editor }) {
             >
                 <AlignRight />
             </Button>
+
+            <Button
+                onClick={() => editor.chain().focus().toggleBold().run()}
+                variant="outline"
+                size="icon"
+            >
+                <Bold strokeWidth={4}/>
+            </Button>
+
+            
         </div>
     )
 }

@@ -12,7 +12,7 @@ import {
 export default function LoginPage(){
     return (
         <div className="flex justify-center items-center h-svh">
-            <div className="w-2/12">
+            <div className="w-full max-w-xs px-5">
                 <Tabs defaultValue="login">
                     <TabsList className="grid grid-cols-2">
                         <TabsTrigger value="login">Login</TabsTrigger>

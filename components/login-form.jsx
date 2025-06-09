@@ -50,7 +50,7 @@ export default function LoginForm() {
                 //show loading
             },
             onSuccess: (ctx) => {
-                redirect("/");
+                redirect("/notes");
             },
             onError: (ctx) => {
                 // display the error message

@@ -17,9 +17,9 @@ import NoteCardSkeleton from "./note-card-skeleton";
 import Link from 'next/link'
 
 
-export default function AppSidebar({ notes, selectedId }){
+export default function AppSidebar({ className, notes, selectedId }){
     return (
-        <Sidebar>
+        <Sidebar className={className}>
             <SidebarHeader>
             <SidebarGroup>
                 <SidebarGroupLabel>Crea nota</SidebarGroupLabel>
