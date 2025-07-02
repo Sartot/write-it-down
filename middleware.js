@@ -13,5 +13,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-    matcher: ["/", "/notes(.*)"], // Apply middleware to the root route
+    matcher: ["/notes(.*)"], // Apply middleware to the root route
 };

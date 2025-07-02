@@ -1,39 +1,32 @@
 'use client'
 
-import TextEditor from "@/components/TextEditor";
-import { authClient } from "@/lib/auth-client"
-import { useState, useEffect } from "react";
-
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() { 
-    const [notes, setNotes] = useState([]);
-    const [currentNote, setCurrentNote] = useState(null);
-
-    useEffect(() => {
-        async function fetchNotes(){
-            const { data: session } = await authClient.getSession() 
-            console.log(session);
-            fetch('/api/notes?user_id='+session.user.id, {
-                method: "GET",
-            })
-            .then((res) => res.json())
-            .then((data) => {
-                // console.log(data)
-                setNotes(data);
-                setCurrentNote(data[0]);
-            })
-        }
-
-        fetchNotes();
-    }, [])
-
     return (
-        <div className="h-inherit text-white">
-            {notes.length ? (
-                <TextEditor noteId={currentNote.id} content={currentNote.content} />
-            ) : (
-                <div>Caricamento...</div>
-            )}
+        <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 flex items-center justify-center">
+            <div className="text-center space-y-8 px-4">
+                <div className="space-y-4">
+                    <h1 className="text-6xl md:text-8xl font-bold text-white drop-shadow-lg">
+                        Write It Down
+                    </h1>
+                    <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto">
+                        Capture your thoughts, organize your ideas, and study smarter with AI-powered assistance
+                    </p>
+                </div>
+                
+                <div className="pt-8">
+                    <Link href="/notes">
+                        <Button 
+                            size="lg" 
+                            className="bg-white hover:bg-gray-100 text-lg px-8 py-6 font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                        >
+                            Get Started
+                        </Button>
+                    </Link>
+                </div>
+            </div>
         </div>
     );
 }
