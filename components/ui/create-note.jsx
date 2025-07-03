@@ -28,9 +28,6 @@ export default function CreateNoteButton(){
             });
 
             if (response.ok) {
-                // Revalida la cache delle note
-                router.refresh();
-                // Naviga alla nuova nota
                 router.push(`/notes/${request_body.id}`);
             } else {
                 console.error('Failed to create note');

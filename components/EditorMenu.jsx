@@ -1,7 +1,7 @@
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Undo, Redo, Bold, Italic, Underline, AlignLeft, AlignRight, AlignCenter, Subscript, Superscript } from "lucide-react";
+import { Undo, Redo, Bold, Italic, Underline, AlignLeft, AlignRight, AlignCenter, Subscript, Superscript, Trash2 } from "lucide-react";
 
-export default function EditorMenu({ editor }) {
+export default function EditorMenu({ editor, onDeleteNote }) {
     return (
         <div className="w-full flex gap-x-3">
             <Button
@@ -91,6 +91,17 @@ export default function EditorMenu({ editor }) {
             >
                 <Superscript />
             </Button>
+
+            {onDeleteNote && (
+                <Button
+                    onClick={onDeleteNote}
+                    variant="outline"
+                    size="icon"
+                    className="ml-auto text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                >
+                    <Trash2 />
+                </Button>
+            )}
         </div>
     )
 }

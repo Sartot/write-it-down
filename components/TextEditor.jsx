@@ -11,6 +11,7 @@ import FileHandler from "@tiptap-pro/extension-file-handler";
 import Image from '@tiptap/extension-image'
 import { useRef, useState, useEffect } from "react";
 import { authClient } from "@/lib/auth-client";
+import { useRouter } from 'next/navigation';
 
 import { Input } from "@/components/ui/input";
 import EditorMenu from "@/components/EditorMenu";
@@ -55,6 +56,8 @@ export default function TextEditor({ note, isLoading }) {
     const [isSaving, setSaving] = useState(false);
     const titleRef = useRef(note.title);
     const [open, setOpen] = useState(false);
+
+    const router = useRouter();
 
     const [topic, setTopic] = useState("");
     const [questions, setQuestions] = useState([]);
@@ -241,6 +244,35 @@ export default function TextEditor({ note, isLoading }) {
         api.scrollTo(0);
     }
 
+    async function deleteNote(){
+        if (!note?.id) return;
+
+        const confirmed = window.confirm("Are you sure you want to delete this note?");
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch(`/api/notes/${note.id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            console.log(response);
+
+            if (response.ok) {
+                // Redirect to notes page after successful deletion
+                router.push("/notes");
+            }
+            //  else {
+            //     console.error('Failed to delete note');
+            //     alert('Failed to delete note. Please try again.');
+            // }
+        } catch (error) {
+            console.log(error);
+            alert('Error deleting note. Please try again.');
+        }
+    }
 
     return (
         <div className="h-full px-5 py-4">
@@ -257,7 +289,7 @@ export default function TextEditor({ note, isLoading }) {
             {editor ? (
                 <>
                     <div className="py-4">
-                        <EditorMenu editor={editor} />
+                        <EditorMenu editor={editor} onDeleteNote={note?.id ? deleteNote : null} />
                     </div>
                     <div className="">
                         <EditorContent editor={editor} />

@@ -17,7 +17,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 
 const formSchema = z.object({
@@ -41,6 +41,8 @@ export default function SignUpForm() {
         },
     })
 
+    const router = useRouter();
+
     async function onSubmit(values) {
         let email = values.email;
         let pwd = values.pwd;
@@ -56,7 +58,7 @@ export default function SignUpForm() {
                 //show loading
             },
             onSuccess: (ctx) => {
-                redirect("/");
+                router.push("/");
             },
             onError: (ctx) => {
                 // display the error message

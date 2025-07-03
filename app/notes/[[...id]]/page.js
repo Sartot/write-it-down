@@ -4,17 +4,16 @@ import React, { useEffect } from "react";
 import TextEditor from "@/components/TextEditor";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useRouter } from 'next/navigation'
-import { Button } from "@/components/ui/button";
 
 export default function NotePage({ params }) {
     const { id } = React.use(params);
-    const router = useRouter();
     const sidebarContext = useSidebar();
     const notes = sidebarContext.notes;
+    const router = useRouter();
     
     useEffect(() => {
         if (typeof id === "undefined") {
-            router.push("/notes/" + notes[0].id);
+            router.push("/notes/" + notes[0].id)
         }
     }, [id, router, notes]);
     
