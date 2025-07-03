@@ -23,7 +23,7 @@ export default function AppSidebar({ className, notes, selectedId }){
         <Sidebar className={className}>
             <SidebarHeader>
                 <SidebarGroup>
-                    <SidebarGroupLabel>Crea nota</SidebarGroupLabel>
+                    <SidebarGroupLabel>Create Note</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             <SidebarMenuItem>
@@ -37,7 +37,7 @@ export default function AppSidebar({ className, notes, selectedId }){
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
-                    <SidebarGroupLabel>Modifica nota</SidebarGroupLabel>
+                    <SidebarGroupLabel>Modify Note</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {
