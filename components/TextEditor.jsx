@@ -3,6 +3,10 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
+import Underline from "@tiptap/extension-underline";
+import Italic from "@tiptap/extension-italic";
+import Subscript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
 import FileHandler from "@tiptap-pro/extension-file-handler";
 import Image from '@tiptap/extension-image'
 import { useRef, useState, useEffect } from "react";
@@ -71,6 +75,9 @@ export default function TextEditor({ note, isLoading }) {
                     levels: [1, 2, 3],
                 },
             }),
+            Underline,
+            Subscript,
+            Superscript,
             FileHandler.configure({
                 allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
                 onDrop: (currentEditor, files, pos) => {
@@ -247,12 +254,18 @@ export default function TextEditor({ note, isLoading }) {
             <div className="py-6 text-slate-600">
                 {isSaving ? "Saving..." : "Saved"}
             </div>
-            <div className="py-4">
-                <EditorMenu editor={editor} />
-            </div>
-            <div className="">
-                <EditorContent editor={editor} />
-            </div>
+            {editor ? (
+                <>
+                    <div className="py-4">
+                        <EditorMenu editor={editor} />
+                    </div>
+                    <div className="">
+                        <EditorContent editor={editor} />
+                    </div>
+                </>
+            ) : (
+                <></>
+            )}
 
             <Button
                 className="absolute bottom-8 right-8"
