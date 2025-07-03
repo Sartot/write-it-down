@@ -28,6 +28,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
+
 import { Textarea } from "@/components/ui/textarea"
 
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
@@ -57,6 +58,8 @@ export default function TextEditor({ note, isLoading }) {
     const answersRef = useRef([]);
     const [loadingAnswers, setLoadingAnswers] = useState(false);
     const [answersData, setAnswersData] = useState([]);
+
+    const [api, setApi] = useState();
 
     const editor = useEditor({
         extensions: [
@@ -226,10 +229,9 @@ export default function TextEditor({ note, isLoading }) {
         }));
 
         const response = await getAIEvaluation(JSON.stringify(answersArr));
-        console.log(response);
         const data = JSON.parse(response.text);
-        console.log(data);
         setAnswersData(data);
+        api.scrollTo(0);
     }
 
 
@@ -278,7 +280,7 @@ export default function TextEditor({ note, isLoading }) {
                     {
                         questions.length ? 
                         (
-                            <Carousel orientation="vertical" className="my-10">
+                            <Carousel orientation="vertical" className="my-10" setApi={setApi}>
                                 <CarouselPrevious/>
                                 <CarouselContent className="h-[400px]">
                                     {questions.map((question, i) => {

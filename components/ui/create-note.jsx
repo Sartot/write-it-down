@@ -27,9 +27,6 @@ export default function CreateNoteButton(){
                 body: JSON.stringify(request_body),
             });
 
-            console.log(request_body);
-            console.log(response)
-
             if (response.ok) {
                 // Revalida la cache delle note
                 router.refresh();
