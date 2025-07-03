@@ -141,7 +141,7 @@ export default function TextEditor({ note, isLoading }) {
     }, [note]);
 
 
-    // Auto-save after 2s
+    // Auto-save after 1s
     function updateHandler() {
         if (updateTimeoutRef.current) {
             clearTimeout(updateTimeoutRef.current);
@@ -159,7 +159,7 @@ export default function TextEditor({ note, isLoading }) {
             }
 
             updateTimeoutRef.current = null;
-        }, 2000);
+        }, 1000);
     }
 
 
