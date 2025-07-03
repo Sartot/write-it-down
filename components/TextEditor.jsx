@@ -39,7 +39,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 
 import { v4 } from "uuid";
-import { getAIQuestions, getAIEvaluation } from "@/lib/utils";
+import { getAIQuestions, getAIEvaluation, createNote, updateNote, deleteNote } from "@/lib/utils";
 
 import {
   Dialog,
@@ -49,6 +49,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 
 export default function TextEditor({ note, isLoading }) {
@@ -163,61 +176,6 @@ export default function TextEditor({ note, isLoading }) {
     }
 
 
-    function createNote(user_id, title, content){
-        const request_body = JSON.stringify({
-            user_id: user_id,
-            id: v4(),
-            title: title,
-            content: content,
-        });
-
-        fetch("/api/notes", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: request_body,
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            console.log("Nota aggiornata con successo:", data);
-        })
-        .catch((error) => {
-            console.error("Errore durante l'aggiornamento della nota:", error);
-        })
-        .finally(() => {
-            setSaving(false);
-        });
-    }
-
-
-    function updateNote(id, title, content){
-        const request_body = JSON.stringify({
-            id: id,
-            title: title,
-            content: content,
-        });
-
-        fetch("/api/notes", {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: request_body,
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            console.log("Nota aggiornata con successo:", data);
-        })
-        .catch((error) => {
-            console.error("Errore durante l'aggiornamento della nota:", error);
-        })
-        .finally(() => {
-            setSaving(false);
-        });
-    }
-
-
     async function askAI(){
         setOpen(true);
 
@@ -244,35 +202,6 @@ export default function TextEditor({ note, isLoading }) {
         api.scrollTo(0);
     }
 
-    async function deleteNote(){
-        if (!note?.id) return;
-
-        const confirmed = window.confirm("Are you sure you want to delete this note?");
-        if (!confirmed) return;
-
-        try {
-            const response = await fetch(`/api/notes/${note.id}`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-
-            console.log(response);
-
-            if (response.ok) {
-                // Redirect to notes page after successful deletion
-                router.push("/notes");
-            }
-            //  else {
-            //     console.error('Failed to delete note');
-            //     alert('Failed to delete note. Please try again.');
-            // }
-        } catch (error) {
-            console.log(error);
-            alert('Error deleting note. Please try again.');
-        }
-    }
 
     return (
         <div className="h-full px-5 py-4">
@@ -289,7 +218,7 @@ export default function TextEditor({ note, isLoading }) {
             {editor ? (
                 <>
                     <div className="py-4">
-                        <EditorMenu editor={editor} onDeleteNote={note?.id ? deleteNote : null} />
+                        <EditorMenu editor={editor} onDeleteNote={note?.id ? () => {deleteNote(note.id)} : null} />
                     </div>
                     <div className="">
                         <EditorContent editor={editor} />
@@ -305,6 +234,23 @@ export default function TextEditor({ note, isLoading }) {
             >
                 Study with AI
             </Button>
+
+            <AlertDialog>
+                <AlertDialogTrigger>Open</AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete your account
+                        and remove your data from our servers.
+                    </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction>Continue</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
 
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent className="rounded-lg">
