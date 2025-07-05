@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server'
 import mysql from 'mysql2/promise'
+import { revalidateTag } from 'next/cache'
 
 
 let connectionParams =  {
@@ -22,7 +23,9 @@ export async function GET(request) {
     let values = [user]
     const [results] = await connection.execute(get_exp_query, values)
     // console.log(results);
-    connection.end()
+    connection.end();
+
+    revalidateTag('notes-data');
 
     return NextResponse.json(results)
 
@@ -88,6 +91,9 @@ export async function PUT(request){
         values.push(id);
 
         const result = await connection.execute("UPDATE note SET " + fields.join(", ") + ", updatedAt = ? where id = ?", values);
+        
+        revalidateTag('notes-data');
+        
         return NextResponse.json({ result }, { status: 200 });
     }catch(err){
         console.log(err);

@@ -11,7 +11,6 @@ import FileHandler from "@tiptap-pro/extension-file-handler";
 import Image from '@tiptap/extension-image'
 import { useRef, useState, useEffect } from "react";
 import { authClient } from "@/lib/auth-client";
-import { useRouter } from 'next/navigation';
 
 import { Input } from "@/components/ui/input";
 import EditorMenu from "@/components/EditorMenu";
@@ -38,7 +37,6 @@ import { Textarea } from "@/components/ui/textarea"
 
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 
-import { v4 } from "uuid";
 import { getAIQuestions, getAIEvaluation, createNote, updateNote, deleteNote } from "@/lib/utils";
 
 import {
@@ -51,26 +49,11 @@ import {
 } from "@/components/ui/dialog"
 
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-
-
 export default function TextEditor({ note, isLoading }) {
     const updateTimeoutRef = useRef(null);
     const [isSaving, setSaving] = useState(false);
     const titleRef = useRef(note.title);
     const [open, setOpen] = useState(false);
-
-    const router = useRouter();
 
     const [topic, setTopic] = useState("");
     const [questions, setQuestions] = useState([]);
@@ -165,7 +148,7 @@ export default function TextEditor({ note, isLoading }) {
             setSaving(true);
 
             if(note){
-                updateNote(note.id, titleRef.current.value, editor.getHTML());
+                updateNote(note.id, titleRef.current.value, editor.getHTML(), setSaving);
             }else{
                 var {data: session} = await authClient.getSession();
                 createNote(session.user.id, titleRef.current.value, editor.getHTML());
@@ -218,7 +201,7 @@ export default function TextEditor({ note, isLoading }) {
             {editor ? (
                 <>
                     <div className="py-4">
-                        <EditorMenu editor={editor} onDeleteNote={note?.id ? () => {deleteNote(note.id)} : null} />
+                        <EditorMenu editor={editor} onDeleteNote={note?.id ? async () => {return deleteNote(note.id)} : null} />
                     </div>
                     <div className="">
                         <EditorContent editor={editor} />
@@ -234,23 +217,6 @@ export default function TextEditor({ note, isLoading }) {
             >
                 Study with AI
             </Button>
-
-            <AlertDialog>
-                <AlertDialogTrigger>Open</AlertDialogTrigger>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your account
-                        and remove your data from our servers.
-                    </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Continue</AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
 
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent className="rounded-lg">

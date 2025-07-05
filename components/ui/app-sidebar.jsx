@@ -15,10 +15,9 @@ import NoteCard from "./note-card";
 import NoteCardSkeleton from "./note-card-skeleton";
 import Link from 'next/link'
 import CreateNoteButton from '@/components/ui/create-note'
-import { PenLine } from "lucide-react";
 
 export default function AppSidebar({ className, notes, selectedId }){
-    
+
     return (
         <Sidebar className={className}>
             <SidebarHeader>

@@ -25,8 +25,12 @@ export default function NotePage({ params }) {
     const note = notes.find((value) => value.id == id);
 
     return (
-        <div className="flex-grow text-white relative">
-            <TextEditor note={note} />
-        </div>
+        note ? (
+            <div className="flex-grow text-white relative">
+                <TextEditor note={note} />
+            </div>
+        ) : (
+            null
+        )
     );
 }

@@ -26,6 +26,12 @@ export default async function DashboardLayout({children, params}){
     }
 
     const notes = await fetchNotes();
+    notes.sort((a, b) => {
+        var aDate = new Date(a.updatedAt);
+        var bDate = new Date(b.updatedAt);
+
+        return aDate > bDate;
+    });
 
     return (
         <div className="flex justify-between items-stretch bg-sidebar min-h-svh">
