@@ -15,12 +15,32 @@ import NoteCard from "./note-card";
 import NoteCardSkeleton from "./note-card-skeleton";
 import Link from 'next/link'
 import CreateNoteButton from '@/components/ui/create-note'
+import { Button } from '@/components/ui/button';
+import { User } from 'lucide-react';
 
 export default function AppSidebar({ className, notes, selectedId }){
 
     return (
         <Sidebar className={className}>
             <SidebarHeader>
+                <SidebarGroup>
+                    <SidebarGroupLabel>Account</SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            <SidebarMenuItem>
+                                <div className="flex items-center gap-2 w-full p-2">
+                                    <Link href="/account">
+                                        <Button>
+                                            <User />
+                                            Edit account
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </SidebarMenuItem>
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
+                
                 <SidebarGroup>
                     <SidebarGroupLabel>Create Note</SidebarGroupLabel>
                     <SidebarGroupContent>
