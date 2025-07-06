@@ -1,4 +1,4 @@
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Undo, Redo, Bold, Italic, Underline, AlignLeft, AlignRight, AlignCenter, Subscript, Superscript, Trash2 } from "lucide-react";
 import { redirect } from 'next/navigation';
 
@@ -115,6 +115,7 @@ export default function EditorMenu({ editor, onDeleteNote }) {
             >
                 <Superscript />
             </Button>
+
 
             <AlertDialog>
                 <AlertDialogTrigger asChild>
