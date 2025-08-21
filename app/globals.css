@@ -97,3 +97,21 @@ ol.editor-list{
 ul.editor-list{
   list-style-type: disc;
 }
+
+.scrolled-menu{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 2;
+
+  transition: all 0.3s ease;
+}
+.scrolled-menu.visible{
+  visibility: visible;
+  opacity: 1;
+}

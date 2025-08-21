@@ -52,6 +52,9 @@ import {
 } from "@/components/ui/dialog"
 
 
+import { motion, useScroll, useMotionValueEvent } from "motion/react"; 
+
+
 export default function TextEditor({ note, isLoading }) {
     const updateTimeoutRef = useRef(null);
     const [isSaving, setSaving] = useState(false);
@@ -67,6 +70,14 @@ export default function TextEditor({ note, isLoading }) {
     const [answersData, setAnswersData] = useState([]);
 
     const [api, setApi] = useState();
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    const { scrollYProgress, scrollY } = useScroll();
+
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        console.log("Page scroll: ", latest);
+        setIsScrolled(latest > 200);
+    })
 
     const editor = useEditor({
         extensions: [
@@ -208,7 +219,7 @@ export default function TextEditor({ note, isLoading }) {
 
 
     return (
-        <div className="h-full px-5 py-4">
+        <div className="h-full px-5 py-4 relative">
             <Input 
                 ref={titleRef}
                 placeholder="Title"
@@ -227,6 +238,17 @@ export default function TextEditor({ note, isLoading }) {
                                 deleteNoteFromContext(deletedNoteId);
                             });
                         } : null} />
+                    </div>
+                    <div 
+                        className={`py-4 scrolled-menu ${isScrolled ? "visible" : ""}`}
+                    >
+                        <div>
+                            <EditorMenu editor={editor} onDeleteNote={note?.id ? async () => {
+                                return deleteNote(note.id, (deletedNoteId) => {
+                                    deleteNoteFromContext(deletedNoteId);
+                                });
+                            } : null} />
+                        </div>
                     </div>
                     <div className="">
                         <EditorContent editor={editor} />
