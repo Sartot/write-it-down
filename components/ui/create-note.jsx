@@ -5,9 +5,11 @@ import { Button } from '@/components/ui/button'
 import { v4 } from 'uuid'
 import { useRouter } from 'next/navigation'
 import { authClient } from "@/lib/auth-client";
+import { useNotes } from "@/contexts/NotesContext";
 
 export default function CreateNoteButton(){
     const router = useRouter();
+    const { addNote } = useNotes();
 
     async function handleNewNote(){
         try {
@@ -28,6 +30,12 @@ export default function CreateNoteButton(){
             });
 
             if (response.ok) {
+                // Add the new note to the context
+                addNote({
+                    ...request_body,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                });
                 router.push(`/notes/${request_body.id}`);
             } else {
                 console.error('Failed to create note');

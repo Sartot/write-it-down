@@ -1,3 +1,5 @@
+"use client";
+
 import { 
     Sidebar, 
     SidebarContent, 
@@ -17,8 +19,10 @@ import Link from 'next/link'
 import CreateNoteButton from '@/components/ui/create-note'
 import { Button } from '@/components/ui/button';
 import { User } from 'lucide-react';
+import { useNotes } from "@/contexts/NotesContext";
 
-export default function AppSidebar({ className, notes, selectedId }){
+export default function AppSidebar({ className, selectedId }){
+    const { notes } = useNotes();
 
     return (
         <Sidebar className={className}>
@@ -60,7 +64,7 @@ export default function AppSidebar({ className, notes, selectedId }){
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {
-                                notes && notes.length ? (
+                                notes instanceof Array ? (
                                     notes.map((note) => (
                                         <SidebarMenuItem key={note.id}>
                                             <Link href={`/notes/${note.id}`}>

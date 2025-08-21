@@ -3,6 +3,7 @@ import AppSidebar from "@/components/ui/app-sidebar";
 import { auth } from "@/lib/auth"
 import { headers } from 'next/headers'
 import { unstable_cache } from 'next/cache';
+import { NotesProvider } from "@/contexts/NotesContext";
 
 const getCachedNotes = unstable_cache(
     async (userId) => {
@@ -34,14 +35,16 @@ export default async function DashboardLayout({children, params}){
     });
 
     return (
-        <div className="flex justify-between items-stretch bg-sidebar min-h-svh">
-            <SidebarProvider notes={notes}>
-                <AppSidebar notes={notes} selectedId={id}/>
-                <div className="w-full flex flex-col">
-                    <SidebarTrigger />
-                    {children}
-                </div>
-            </SidebarProvider>
-        </div>
+        <NotesProvider initialNotes={notes}>
+            <div className="flex justify-between items-stretch bg-sidebar min-h-svh">
+                <SidebarProvider notes={notes}>
+                    <AppSidebar selectedId={id}/>
+                    <div className="w-full flex flex-col">
+                        <SidebarTrigger />
+                        {children}
+                    </div>
+                </SidebarProvider>
+            </div>
+        </NotesProvider>
     )
 }

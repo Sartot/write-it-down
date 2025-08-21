@@ -12,7 +12,7 @@ export default function NotePage({ params }) {
     const router = useRouter();
     
     useEffect(() => {
-        if (typeof id === "undefined") {
+        if (typeof id === "undefined" && notes instanceof Array && notes.length) {
             router.push("/notes/" + notes[0].id)
         }
     }, [id, router, notes]);

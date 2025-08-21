@@ -11,6 +11,7 @@ import FileHandler from "@tiptap-pro/extension-file-handler";
 import Image from '@tiptap/extension-image'
 import { useRef, useState, useEffect } from "react";
 import { authClient } from "@/lib/auth-client";
+import { useNotes } from "@/contexts/NotesContext";
 
 import { Input } from "@/components/ui/input";
 import EditorMenu from "@/components/EditorMenu";
@@ -54,6 +55,7 @@ export default function TextEditor({ note, isLoading }) {
     const [isSaving, setSaving] = useState(false);
     const titleRef = useRef(note.title);
     const [open, setOpen] = useState(false);
+    const { updateNote: updateNoteInContext, addNote, deleteNote: deleteNoteFromContext } = useNotes();
 
     const [topic, setTopic] = useState("");
     const [questions, setQuestions] = useState([]);
@@ -148,10 +150,17 @@ export default function TextEditor({ note, isLoading }) {
             setSaving(true);
 
             if(note){
-                updateNote(note.id, titleRef.current.value, editor.getHTML(), setSaving);
+                updateNote(note.id, titleRef.current.value, editor.getHTML(), setSaving, (id, title, content) => {
+                    // Update the note in the context to refresh the sidebar
+                    updateNoteInContext(id, title, content);
+                });
             }else{
                 var {data: session} = await authClient.getSession();
-                createNote(session.user.id, titleRef.current.value, editor.getHTML());
+                createNote(session.user.id, titleRef.current.value, editor.getHTML(), (newNote) => {
+                    // Add the new note to the context to refresh the sidebar
+                    addNote(newNote);
+                    setSaving(false);
+                });
             }
 
             updateTimeoutRef.current = null;
@@ -201,7 +210,11 @@ export default function TextEditor({ note, isLoading }) {
             {editor ? (
                 <>
                     <div className="py-4">
-                        <EditorMenu editor={editor} onDeleteNote={note?.id ? async () => {return deleteNote(note.id)} : null} />
+                        <EditorMenu editor={editor} onDeleteNote={note?.id ? async () => {
+                            return deleteNote(note.id, (deletedNoteId) => {
+                                deleteNoteFromContext(deletedNoteId);
+                            });
+                        } : null} />
                     </div>
                     <div className="">
                         <EditorContent editor={editor} />
