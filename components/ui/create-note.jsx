@@ -18,7 +18,7 @@ export default function CreateNoteButton(){
                 user_id: session.user.id,
                 id: v4(),
                 title: "New note",
-                content: ""
+                content: "<br><br><br><br><br><br><br><br><br><br><br><br><br><br>"
             };
 
             const response = await fetch("/api/notes", {

@@ -225,7 +225,7 @@ export default function TextEditor({ note, isLoading }) {
             )}
 
             <Button
-                className="absolute bottom-8 right-8"
+                className="fixed bottom-8 right-8"
                 onClick={askAI}
             >
                 Study with AI
