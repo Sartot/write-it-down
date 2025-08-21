@@ -34,7 +34,7 @@ export default function AppSidebar({ className, selectedId }){
                             <SidebarMenuItem>
                                 <div className="flex items-center gap-2 w-full p-2">
                                     <Link href="/account">
-                                        <Button>
+                                        <Button variant="white">
                                             <User />
                                             Edit account
                                         </Button>

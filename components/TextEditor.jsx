@@ -259,6 +259,7 @@ export default function TextEditor({ note, isLoading }) {
             )}
 
             <Button
+                variant="white"
                 className="fixed bottom-8 right-8"
                 onClick={askAI}
             >
@@ -291,7 +292,7 @@ export default function TextEditor({ note, isLoading }) {
                                         var btn = null;
                                         if(i == questions.length-1){
                                             btn = (
-                                                <Button className={`mt-4`} onClick={checkAnswersAI} disabled={loadingAnswers}>
+                                                <Button variant="white" className={`mt-4`} onClick={checkAnswersAI} disabled={loadingAnswers}>
                                                     {loadingAnswers ? "Loading..." : "Submit"}
                                                 </Button>
                                             )

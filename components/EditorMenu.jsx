@@ -42,7 +42,7 @@ export default function EditorMenu({ editor, onDeleteNote }) {
         <div className="w-full flex gap-x-3">
             <Button
                 onClick={() => editor.chain().focus().undo().run()}
-                variant="outline"
+                variant="default"
                 size="icon"
             >
                 <Undo />
@@ -50,7 +50,7 @@ export default function EditorMenu({ editor, onDeleteNote }) {
 
             <Button
                 onClick={() => editor.chain().focus().redo().run()}
-                variant="outline"
+                variant="default"
                 size="icon"
             >
                 <Redo />
@@ -58,7 +58,7 @@ export default function EditorMenu({ editor, onDeleteNote }) {
 
             <Button
                 onClick={() => editor.chain().focus().setTextAlign('left').run()}
-                variant="outline"
+                variant="default"
                 size="icon"
                 className={editor.isActive({ textAlign: 'left' }) ? 'dark:bg-zinc-800' : ''}
             >
@@ -67,7 +67,7 @@ export default function EditorMenu({ editor, onDeleteNote }) {
 
             <Button
                 onClick={() => editor.chain().focus().setTextAlign('center').run()}
-                variant="outline"
+                variant="default"
                 size="icon"
                 className={editor.isActive({ textAlign: 'center' }) ? 'dark:bg-zinc-800' : ''}
             >
@@ -76,7 +76,7 @@ export default function EditorMenu({ editor, onDeleteNote }) {
 
             <Button
                 onClick={() => editor.chain().focus().setTextAlign('right').run()}
-                variant="outline"
+                variant="default"
                 size="icon"
                 className={editor.isActive({ textAlign: 'right' }) ? 'dark:bg-zinc-800' : ''}
             >
@@ -85,7 +85,7 @@ export default function EditorMenu({ editor, onDeleteNote }) {
 
             <Button
                 onClick={() => editor.chain().focus().toggleBold().run()}
-                variant="outline"
+                variant="default"
                 size="icon"
                 className={editor.isActive('bold') ? 'dark:bg-zinc-800' : ''}
             >
@@ -94,7 +94,7 @@ export default function EditorMenu({ editor, onDeleteNote }) {
 
             <Button
                 onClick={() => editor.chain().focus().toggleItalic().run()}
-                variant="outline"
+                variant="default"
                 size="icon"
                 className={editor.isActive('italic') ? 'dark:bg-zinc-800' : ''}
             >
@@ -103,7 +103,7 @@ export default function EditorMenu({ editor, onDeleteNote }) {
 
             <Button
                 onClick={() => editor.chain().focus().toggleUnderline().run()}
-                variant="outline"
+                variant="default"
                 size="icon"
                 className={editor.isActive('underline') ? 'dark:bg-zinc-800' : ''}
             >
@@ -112,7 +112,7 @@ export default function EditorMenu({ editor, onDeleteNote }) {
 
             <Button
                 onClick={() => editor.chain().focus().toggleSubscript().run()}
-                variant="outline"
+                variant="default"
                 size="icon"
                 className={editor.isActive('subscript') ? 'dark:bg-zinc-800' : ''}
             >
@@ -121,7 +121,7 @@ export default function EditorMenu({ editor, onDeleteNote }) {
 
             <Button
                 onClick={() => editor.chain().focus().toggleSuperscript().run()}
-                variant="outline"
+                variant="default"
                 size="icon"
                 className={editor.isActive('superscript') ? 'dark:bg-zinc-800' : ''}
             >
@@ -130,7 +130,7 @@ export default function EditorMenu({ editor, onDeleteNote }) {
 
             <Button
                 onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                variant="outline"
+                variant="default"
                 size="icon"
                 className={editor.isActive('orderedList') ? 'dark:bg-zinc-800' : ''}
             >
@@ -139,7 +139,7 @@ export default function EditorMenu({ editor, onDeleteNote }) {
 
             <Button
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
-                variant="outline"
+                variant="default"
                 size="icon"
                 className={editor.isActive('bulletList') ? 'dark:bg-zinc-800' : ''}
             >
@@ -151,7 +151,7 @@ export default function EditorMenu({ editor, onDeleteNote }) {
                 <AlertDialogTrigger asChild>
                     <Button
                         // onClick={handleDelete}
-                        variant="outline"
+                        variant="default"
                         size="icon"
                         className="ml-auto text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
                     >

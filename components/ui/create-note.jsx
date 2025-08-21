@@ -47,7 +47,7 @@ export default function CreateNoteButton(){
     }
 
     return (
-        <Button onClick={handleNewNote}>
+        <Button variant="white" onClick={handleNewNote}>
             <PenLine size={16} />
             <span>New Note</span>
         </Button>
