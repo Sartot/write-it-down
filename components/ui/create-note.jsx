@@ -36,6 +36,7 @@ export default function CreateNoteButton(){
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString()
                 });
+
                 router.push(`/notes/${request_body.id}`);
             } else {
                 console.error('Failed to create note');

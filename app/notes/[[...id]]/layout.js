@@ -2,18 +2,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/ui/app-sidebar";
 import { auth } from "@/lib/auth"
 import { headers } from 'next/headers'
-import { unstable_cache } from 'next/cache';
 import { NotesProvider } from "@/contexts/NotesContext";
-
-const getCachedNotes = unstable_cache(
-    async (userId) => {
-        return fetch(process.env.URL+'/api/notes?user_id='+userId, {
-            method: "GET",
-        }).then(res => res.json());
-    },
-    ['notes-data'],
-    { revalidate: 60 } // Riconvalida ogni minuto
-);
 
 export default async function DashboardLayout({children, params}){
     const { id } = await params;
@@ -23,7 +12,10 @@ export default async function DashboardLayout({children, params}){
             headers: await headers(), // pass the headers
         }); 
 
-        return getCachedNotes(session.userId);
+        return fetch(process.env.URL+'/api/notes?user_id='+session.userId, {
+            method: "GET",
+            cache: 'no-store' // Disable caching
+        }).then(res => res.json());
     }
 
     const notes = await fetchNotes();

@@ -53,6 +53,9 @@ export async function POST(request){
         const response = {
             returnedStatus: 201,
         }
+
+        revalidateTag('notes-data');
+        
         return NextResponse.json(response);
     }catch(err){
         console.log('ERROR: API - ', err.message)
