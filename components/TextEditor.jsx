@@ -9,7 +9,7 @@ import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import FileHandler from "@tiptap-pro/extension-file-handler";
 import Image from '@tiptap/extension-image'
-import { ListItem, OrderedList } from "@tiptap/extension-list";
+import { ListItem, OrderedList, BulletList } from "@tiptap/extension-list";
 
 import { useRef, useState, useEffect } from "react";
 import { authClient } from "@/lib/auth-client";
@@ -124,7 +124,16 @@ export default function TextEditor({ note, isLoading }) {
             TextAlign.configure({
                 types: ["heading", "paragraph"],
             }),
-            OrderedList,
+            OrderedList.configure({
+                HTMLAttributes: {
+                    class: 'editor-list'
+                }
+            }),
+            BulletList.configure({
+                HTMLAttributes: {
+                    class: 'editor-list'
+                }
+            }),
         ],
         immediatelyRender: false,
         content: note?.content, // Imposta il contenuto iniziale

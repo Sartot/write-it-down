@@ -91,9 +91,9 @@ body {
   outline: none;
 }
 
-ol{
+ol.editor-list{
   list-style-type: decimal;
 }
-ul{
+ul.editor-list{
   list-style-type: disc;
 }
