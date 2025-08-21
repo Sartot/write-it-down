@@ -1,5 +1,16 @@
 import { Button } from "@/components/ui/button";
-import { Undo, Redo, Bold, Italic, Underline, AlignLeft, AlignRight, AlignCenter, Subscript, Superscript, Trash2 } from "lucide-react";
+import { 
+    Undo, 
+    Redo, 
+    Bold, 
+    Italic, 
+    Underline, 
+    AlignLeft, AlignRight, AlignCenter, 
+    Subscript, Superscript, 
+    Trash2,
+    ListOrdered,
+    List
+} from "lucide-react";
 import { redirect } from 'next/navigation';
 
 import {
@@ -13,6 +24,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { OrderedList } from "@tiptap/extension-list";
 
 
 export default function EditorMenu({ editor, onDeleteNote }) {
@@ -114,6 +126,24 @@ export default function EditorMenu({ editor, onDeleteNote }) {
                 className={editor.isActive('superscript') ? 'dark:bg-zinc-800' : ''}
             >
                 <Superscript />
+            </Button>
+
+            <Button
+                onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                variant="outline"
+                size="icon"
+                className={editor.isActive('orderedList') ? 'dark:bg-zinc-800' : ''}
+            >
+                <ListOrdered />
+            </Button>
+
+            <Button
+                onClick={() => editor.chain().focus().toggleBulletList().run()}
+                variant="outline"
+                size="icon"
+                className={editor.isActive('bulletList') ? 'dark:bg-zinc-800' : ''}
+            >
+                <List />
             </Button>
 
 
