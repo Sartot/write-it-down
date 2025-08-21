@@ -11,7 +11,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
-import { User, Mail, Lock, AlertCircleIcon, CheckCircle } from "lucide-react";
+import { User, Mail, Lock, AlertCircleIcon, CheckCircle, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 
 export default function AccountPage(){
@@ -146,6 +147,11 @@ export default function AccountPage(){
         <div className="min-h-screen p-6">
             <div className="max-w-2xl mx-auto space-y-6">
                 <div className="space-y-2">
+                    <Link href="/notes" className="flex gap-3 items-center pb-6">
+                        <ArrowLeft />
+                        Go back to your notes
+                    </Link>
+
                     <h1 className="text-3xl font-bold">Account Settings</h1>
                     <p className="text-muted-foreground">Manage your account information and security settings</p>
                 </div>
