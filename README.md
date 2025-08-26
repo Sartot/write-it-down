@@ -256,22 +256,6 @@ Deadline di sviluppo: Agosto 2025.
 - Test su browser multipli (Chrome, Firefox, Safari)
 - Verifica responsive design su dispositivi diversi
 
-### 4.2 Implementation Status
-
-**✅ Completato:**
-- [x] Database schema per tabella `note` implementato
-- [x] CRUD completo per note funzionante
-- [x] Foreign key constraints per user_id
-- [x] Indici database per performance
-- [x] Autenticazione e gestione sessioni
-- [x] Rich text editor operativo
-- [x] Integrazione AI per domande e valutazioni
-
-**⚠️ In Progress:**
-- [ ] Migration di `updatedAt` con auto-update
-- [ ] Implementazione soft delete
-- [ ] Error handling migliorato
-
 ### 4.3 Known Issues
 
 **Problemi di Sicurezza (Priorità Alta):**
@@ -344,16 +328,16 @@ ALTER TABLE `note`
 ### 5.2 API Endpoints
 
 **Authentication Routes:**
-- `POST /api/auth/sign-in` - User login
-- `POST /api/auth/sign-up` - User registration
-- `GET /api/auth/session` - Get current session
+- `POST /api/auth/sign-in` - Login utente
+- `POST /api/auth/sign-up` - Registrazione utente
+- `GET /api/auth/session` - Ottieni la sessione utente corrente
 
 **Notes Management:**
-- `GET /api/notes?user_id={id}` - Fetch user notes
-- `POST /api/notes` - Create new note
-- `PUT /api/notes` - Update existing note
-- `GET /api/notes/[id]` - Get specific note
-- `DELETE /api/notes/[id]` - Delete note
+- `GET /api/notes?user_id={id}` - Ottieni le note di un dato utente
+- `POST /api/notes` - Crea nuova nota
+- `PUT /api/notes` - Modifica una nota esistente
+- `GET /api/notes/[id]` - Ottieni una nota specifica
+- `DELETE /api/notes/[id]` - Cancella una nota specifica
 
 ### 5.3 Environment Variables
 
@@ -380,16 +364,16 @@ GEMINI_KEY=your_google_gemini_api_key
 
 **Development Setup:**
 1. `npm install --force` (per dependency conflicts)
-2. Configure .env variables
-3. Setup MySQL database
-4. Run migrations: `npm run migrate`
-5. Start development: `pnpm dev`
+2. Configura variabili .env
+3. Setup DB MySQL
+4. Esegui migrazioni database: `npm run migrate`
+5. Esegui ambiente di sviluppo: `pnpm dev`
 
 **Production Deployment:**
-1. `pnpm build` - Build production bundle
-2. Configure production database
-3. Set environment variables
-4. `pnpm start` - Start production server
+1. Esegui build per ambiente di produzione: `pnpm build`
+2. Configura varibili .env
+3. Setup DB MySQL di produzione
+4. Esegui server NodeJS in produzione ( server.js ): `pnpm start`
 
 ### 5.5 Technology Stack Details
 
