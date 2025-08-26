@@ -7,7 +7,7 @@ import Underline from "@tiptap/extension-underline";
 import Italic from "@tiptap/extension-italic";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
-import FileHandler from "@tiptap-pro/extension-file-handler";
+import FileHandler from "@tiptap/extension-file-handler";
 import Image from '@tiptap/extension-image'
 import { ListItem, OrderedList, BulletList } from "@tiptap/extension-list";
 
