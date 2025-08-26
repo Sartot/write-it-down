@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-    title: "Write It, Down",
+    title: "Write It Down",
     description: "Note taking web app for students",
 };
 
