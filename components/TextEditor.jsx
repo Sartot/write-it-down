@@ -211,7 +211,7 @@ export default function TextEditor({ note, isLoading }) {
             student_answer: answersRef.current[index]?.value || ""
         }));
 
-        const response = await getAIEvaluation(JSON.stringify(answersArr));
+        const response = await getAIEvaluation(answersArr);
         const data = JSON.parse(response.text);
         setAnswersData(data);
         api.scrollTo(0);
