@@ -153,8 +153,21 @@ L'applicativo deve interfacciarsi con il modello di IA nel modo più veloce poss
 ### 3.5 Design and Implementation
 
 #### 3.5.1 Installation
-L'installazione del software avviene tramite il comando npm install --force .
+L'installazione del software avviene tramite il comando `npm install --force`.
 Al momento il flag --force è necessario per alcuni problemi relativi ad una dipendenza ( @tiptap/core, vedi issue #15880 https://github.com/open-webui/open-webui/issues/15880 ).
+
+Nel file .env è necessario impostare alcune variabili per il processo, in particolare:
+* BETTER_AUTH_SECRET : usato da better-auth per la cifratura e la generazione di hash
+* BETTER_AUTH_URL : url base della web app
+* DB_HOST : indirizzo ip del server MySQL
+* DB_USER : utente del server MySQL
+* DB_PWD : password dell'utente MySQL
+* DB_NAME : nome del database in cui si lavora
+* BASE_URL : url base della web app
+* GEMINI_KEY : chiave API per Google Gemini
+
+Il server NextJS può essere eseguito con il comando `pnpm dev` oppure `next dev --turbopack`.
+Il processo di build può essere eseguito con il comando `pnpm build` oppure `next build`.
 
 #### 3.5.2 Distribution
 Il software è stato costruito per funzionare al meglio su dispositivi desktop, tuttavia è disponibile anche una versione per l'utilizzo su dispositivi mobili.
