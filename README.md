@@ -3,7 +3,6 @@
 
 Version 1.0 
 Prepared by <author>Lorenzo Sartori</author> @ <organization>UniPR</organization>
-<date created>  
 
 Table of Contents
 =================
@@ -23,14 +22,11 @@ Table of Contents
 * 3 [Requirements](#3-requirements)
   * 3.1 [External Interfaces](#31-external-interfaces)
     * 3.1.1 [User Interfaces](#311-user-interfaces)
-    * 3.1.2 [Hardware Interfaces](#312-hardware-interfaces)
     * 3.1.3 [Software Interfaces](#313-software-interfaces)
   * 3.2 [Functional](#32-functional)
   * 3.3 [Quality of Service](#33-quality-of-service)
     * 3.3.1 [Performance](#331-performance)
     * 3.3.2 [Security](#332-security)
-    * 3.3.3 [Reliability](#333-reliability)
-    * 3.3.4 [Availability](#334-availability)
   * 3.4 [Compliance](#34-compliance)
   * 3.5 [Design and Implementation](#35-design-and-implementation)
     * 3.5.1 [Installation](#351-installation)
@@ -53,17 +49,51 @@ Ogni utente è in grado di creare un account personale dove verranno salvate le 
 
 ### 1.3 Definitions, Acronyms and Abbreviations
 
+* **SRS**: Software Requirements Specification
+* **API**: Application Programming Interface
+* **LLM**: Large Language Model
+* **DB**: Database
+* **UI/UX**: User Interface/User Experience
+* **CRUD**: Create, Read, Update, Delete
+* **NextJS**: React framework per applicazioni full-stack
+* **TipTap**: Rich text editor per React
+* **Better Auth**: Libreria di autenticazione per JavaScript
+* **MySQL**: Sistema di gestione database relazionale
+* **Gemini**: Modello di intelligenza artificiale di Google
+* **shadcn/ui**: Libreria di componenti UI per React
+
 ### 1.4 References
-List any other documents or Web addresses to which this SRS refers. These may include user interface style guides, contracts, standards, system requirements specifications, use case documents, or a vision and scope document. Provide enough information so that the reader could access a copy of each reference, including title, author, version number, date, and source or location.
 Nel corpo del documento sarà fatto riferimento ad alcuni strumenti/librerie software:
 * Shadcn/ui: https://ui.shadcn.com/docs
 * Better Auth (Autenticazione utente): https://www.better-auth.com/docs/introduction
 * TipTap Editor: https://tiptap.dev/docs/editor/getting-started/overview
 
+### 1.5 Document Overview
+Questo documento è strutturato in 5 sezioni principali:
+1. **Introduction**: Fornisce il contesto e lo scopo del documento
+2. **Product Overview**: Descrive le funzionalità e i vincoli del sistema
+3. **Requirements**: Specifica i requisiti funzionali e non funzionali
+4. **Verification**: Definisce i criteri e metodi di verifica
+5. **Appendixes**: Contiene informazioni supplementari e riferimenti tecnici
+
 ## 2. Product Overview
 
 ### 2.1 Product Perspective
-Describe the context and origin of the product being specified in this SRS. For example, state whether this product is a follow-on member of a product family, a replacement for certain existing systems, or a new, self-contained product. If the SRS defines a component of a larger system, relate the requirements of the larger system to the functionality of this software and identify interfaces between the two. A simple diagram that shows the major components of the overall system, subsystem interconnections, and external interfaces can be helpful.
+Write It Down è un'applicazione web standalone, sviluppata come progetto universitario per il corso di Tecnologie Internet presso UniPR. L'applicazione è self-contained e non fa parte di una famiglia di prodotti esistente.
+
+**Architettura del Sistema:**
+- **Frontend**: Applicazione React basata su Next.js con App Router
+- **Backend**: API Routes di Next.js per la logica server-side
+- **Database**: MySQL per il salvataggio di dati persistenti
+- **Servizi Esterni**: Google Gemini API per funzionalità AI
+- **Autenticazione**: Better Auth per gestione utenti e sessioni
+
+**Componenti Principali:**
+1. **Client Web** (React/Next.js): Interfaccia utente responsive
+2. **Server API** (Next.js API Routes): Logica per la gestione e il salvataggio dei dati
+3. **Database MySQL**: Storage per utenti e note
+4. **AI Service** (Google Gemini): Generazione domande e valutazioni
+5. **Authentication Layer** (Better Auth): Gestione sicurezza e sessioni
 
 ### 2.2 Product Functions
 * Registrazione di un account personale
@@ -85,44 +115,48 @@ Describe the context and origin of the product being specified in this SRS. For 
 Al momento non esiste una distizione tra utente finale e utente admin. Per questioni di test l'API del modello AI non è soggetta a limitazioni.
 
 ### 2.5 Assumptions and Dependencies
-List any assumed factors (as opposed to known facts) that could affect the requirements stated in the SRS. These could include third-party or commercial components that you plan to use, issues around the development or operating environment, or constraints. The project could be affected if these assumptions are incorrect, are not shared, or change. Also identify any dependencies the project has on external factors, such as software components that you intend to reuse from another project, unless they are already documented elsewhere (for example, in the vision and scope document or the project plan).
+
+**Assunzioni:**
+- Gli utenti hanno accesso a una connessione internet stabile
+- I browser supportano HTML5, CSS3 e JavaScript ES6+
+- Il server MySQL è sempre disponibile e configurato correttamente
+- L'API di Google Gemini rimane accessibile e stabile
+- Gli utenti utilizzano dispositivi con almeno 2GB di RAM
+
+**Dipendenze Esterne:**
+- **Google Gemini API**: Servizio critico per funzionalità AI
+- **MySQL Database**: Necessario per persistenza dati e il salvataggio della sessione utente ( autenticazione )
+- **Node.js Runtime**: Versione 18+ per compatibilità Next.js
+- **Better Auth Service**: Per autenticazione e gestione sessioni
+
+**Dipendenze di Sviluppo:**
+- React 19.1.0+
+- Next.js 15.3.4+
+- TipTap 2.24.0+ per rich text editing
+- Tailwind CSS per styling
+- shadcn/ui per componenti UI
 
 ### 2.6 Apportioning of Requirements
-Apportion the software requirements to software elements. For requirements that will require implementation over multiple software elements, or when allocation to a software element is initially undefined, this should be so stated. A cross reference table by function and software element should be used to summarize the apportioning.
 
-Identify requirements that may be delayed until future versions of the system (e.g., blocks and/or increments).
+**Distribuzione dei Requisiti per Componente:**
+
+| Funzionalità | Frontend (React) | Backend (API) | Database | AI Service |
+|--------------|------------------|---------------|----------|------------|
+| Autenticazione | Form UI | Validazione, Sessioni | User storage | - |
+| Gestione Note | Editor, UI | CRUD operations | Note storage | - |
+| AI Questions | Question UI | API integration | - | Content analysis |
+| AI Evaluation | Results UI | API integration | - | Answer evaluation |
 
 ## 3. Requirements
-> This section specifies the software product's requirements. Specify all of the software requirements to a level of detail sufficient to enable designers to design a software system to satisfy those requirements, and to enable testers to test that the software system satisfies those requirements.
-
-> The specific requirements should:
-* Be uniquely identifiable.
-* State the subject of the requirement (e.g., system, software, etc.) and what shall be done.
-* Optionally state the conditions and constraints, if any.
-* Describe every input (stimulus) into the software system, every output (response) from the software system, and all functions performed by the software system in response to an input or in support of an output.
-* Be verifiable (e.g., the requirement realization can be proven to the customer's satisfaction)
-* Conform to agreed upon syntax, keywords, and terms.
 
 ### 3.1 External Interfaces
-> This subsection defines all the inputs into and outputs requirements of the software system. Each interface defined may include the following content:
-* Name of item
-* Source of input or destination of output
-* Valid range, accuracy, and/or tolerance
-* Units of measure
-* Timing
-* Relationships to other inputs/outputs
-* Screen formats/organization
-* Window formats/organization
-* Data formats
-* Command formats
-* End messages
 
 #### 3.1.1 User interfaces
 Le interfacce utente sono 4:
-* Landing page: pagina di atterraggio in cui un nuovo utente arriva. La pagina descrive in poche parole la funzionalità del sistema e offre, attraverso un bottone, la possibilità di registrarsi per provare l'applicativo
+* Landing page: pagina di atterraggio in cui un nuovo utente arriva. La pagina descrive in poche parole la funzionalità del sistema e offre, attraverso un bottone, la possibilità di registrarsi per provare l'applicativo.
 * Pagina di registrazione/accesso utente: la pagina offre la possibilità ad un nuovo utente di registrarsi e a quelli che possiedono già un account di accedere alle proprie note o area utente.
 * Pagina di creazione/modifica delle note: la pagina consente all'utente di visualizzare le proprie note e i rispettivi contenuti. La pagina offre anche la possibilità di navigare attraverso le diverse note attraverso una sidebar e di modificarne il contenuto selezionando una nota e scrivendo nell'apposito Rich Text Editor.
-* Area Utente: l'area utente consente di visualizzare i dati relativi al proprio account e gestirne alcuni aspetti come modificare la propria email/username e la propria password.
+* Area Utente: l'area utente consente di visualizzare i dati relativi al proprio account e gestirne alcuni aspetti come modificare la propria email/username e la propria password. La email inserita deve essere in un formato valido e la password deve essere lunga almeno 8 caratteri.
 
 #### 3.1.3 Software interfaces
 Per funzionare il software sfrutta alcuni componenti essenziali:
@@ -133,10 +167,35 @@ Per funzionare il software sfrutta alcuni componenti essenziali:
 * Tiptap Rich Text Editor, l'integrazione avviene tramite il pacchetto npm tiptap
 * Icone utilizzate in tutto l'applicativo, l'integrazione avviene tramite il pacchetto npm lucide-react
 * Libreria di componenti front-end estendibili shacdn/ui, l'integrazione avviene tramite il pacchetto npm shadcn@latest e includendo separatamente ogni componente utilizzato. La lista di componenti disponibili qui https://ui.shadcn.com/docs/components
-* Better Auth, per autenticazione e verifica della sessione dell'utente, l'integrazione avviene tramite il pacchetto npm better-auth
 
 ### 3.2 Functional
-> This section specifies the requirements of functional effects that the software-to-be is to have on its environment.
+
+**Requisiti Funzionali Dettagliati:**
+
+**FR-001: Gestione Utenti**
+- FR-001.1: L'utente deve poter registrare un nuovo account con email e password
+- FR-001.2: L'utente deve poter autenticarsi con credenziali valide
+- FR-001.3: L'utente deve poter modificare email e password del proprio account
+- FR-001.4: Il sistema deve mantenere la sessione utente attiva per 30 giorni
+
+**FR-002: Gestione Note**
+- FR-002.1: L'utente deve poter creare una nuova nota con titolo e contenuto
+- FR-002.2: L'utente deve poter modificare titolo e contenuto delle proprie note
+- FR-002.3: Il sistema deve salvare automaticamente le modifiche ogni secondo
+- FR-002.4: L'utente deve poter eliminare le proprie note
+- FR-002.5: Le note devono supportare formattazione rich text (grassetto, corsivo, liste, etc.)
+
+**FR-003: Integrazione AI**
+- FR-003.1: Il sistema deve generare domande di studio basate sul contenuto delle note
+- FR-003.2: L'utente deve poter rispondere alle domande generate
+- FR-003.3: Il sistema deve valutare le risposte e fornire feedback con punteggio
+- FR-003.4: Il sistema deve fornire spiegazioni e suggerimenti di studio
+
+**FR-004: Interfaccia Utente**
+- FR-004.1: L'applicazione deve essere responsive per desktop e mobile
+- FR-004.2: L'utente deve poter navigare tra le note tramite sidebar
+- FR-004.3: Il sistema deve mostrare lo stato di salvataggio delle note
+- FR-004.4: L'interfaccia deve supportare tema scuro come default
 
 ### 3.3 Quality of Service
 
@@ -177,3 +236,174 @@ Costo di sviluppo del progetto: indefinito.
 
 #### 3.5.4 Deadline
 Deadline di sviluppo: Agosto 2025.
+
+## 4. Verification
+
+### 4.1 Testing Strategy
+
+**Unit Testing:**
+- Copertura minima 80% per funzioni utility
+- Test per validation logic e data transformation
+- Mocking di servizi esterni (database, API AI)
+
+**Integration Testing:**
+- Test delle API routes con database reale
+- Verifica integrazione con servizi esterni
+- Test dei flussi di autenticazione completi
+
+**End-to-End Testing:**
+- Simulazione percorsi utente completi
+- Test su browser multipli (Chrome, Firefox, Safari)
+- Verifica responsive design su dispositivi diversi
+
+### 4.2 Implementation Status
+
+**✅ Completato:**
+- [x] Database schema per tabella `note` implementato
+- [x] CRUD completo per note funzionante
+- [x] Foreign key constraints per user_id
+- [x] Indici database per performance
+- [x] Autenticazione e gestione sessioni
+- [x] Rich text editor operativo
+- [x] Integrazione AI per domande e valutazioni
+
+**⚠️ In Progress:**
+- [ ] Migration di `updatedAt` con auto-update
+- [ ] Implementazione soft delete
+- [ ] Error handling migliorato
+
+### 4.3 Known Issues
+
+**Problemi di Sicurezza (Priorità Alta):**
+- API Key Google Gemini hardcoded nel codice
+- Credenziali database esposte in file di configurazione
+
+**Problemi Tecnici (Priorità Media):**
+- Error handling limitato nelle API routes
+- Mancanza di rate limiting per API calls
+- Mancanza di trigger per `updatedAt` automatico sulla tabella note
+
+**Miglioramenti Futuri:**
+- Implementazione caching intelligente
+- Aggiunta logging strutturato
+- Aggiungere `ON UPDATE CURRENT_TIMESTAMP` per campo `updatedAt`
+- Implementare soft delete per note (campo `deleted_at`)
+- Aggiungere indice per performance su `updatedAt`
+
+## 5. Appendixes
+
+### 5.1 Database Schema
+
+**Tabelle Better Auth (Implementate):**
+```sql
+-- Tabella utenti
+CREATE TABLE `user` (
+  `id` varchar(36) NOT NULL PRIMARY KEY, 
+  `name` text NOT NULL, 
+  `email` varchar(255) NOT NULL UNIQUE, 
+  `emailVerified` boolean NOT NULL, 
+  `image` text, 
+  `createdAt` datetime NOT NULL, 
+  `updatedAt` datetime NOT NULL
+);
+
+-- Tabella sessioni
+CREATE TABLE `session` (
+  `id` varchar(36) NOT NULL PRIMARY KEY, 
+  `expiresAt` datetime NOT NULL, 
+  `token` varchar(255) NOT NULL UNIQUE, 
+  `createdAt` datetime NOT NULL, 
+  `updatedAt` datetime NOT NULL, 
+  `ipAddress` text, 
+  `userAgent` text, 
+  `userId` varchar(36) NOT NULL REFERENCES `user` (`id`)
+);
+```
+
+**Schema Note (Implementato):**
+```sql
+-- Tabella note (IMPLEMENTATA)
+CREATE TABLE `note` (
+  `id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
+  `user_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL,
+  `title` text COLLATE utf8mb4_general_ci,
+  `content` longtext COLLATE utf8mb4_general_ci,
+  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Indici e constraints
+ALTER TABLE `note`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_user_id` (`user_id`);
+
+ALTER TABLE `note`
+  ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+```
+
+### 5.2 API Endpoints
+
+**Authentication Routes:**
+- `POST /api/auth/sign-in` - User login
+- `POST /api/auth/sign-up` - User registration
+- `GET /api/auth/session` - Get current session
+
+**Notes Management:**
+- `GET /api/notes?user_id={id}` - Fetch user notes
+- `POST /api/notes` - Create new note
+- `PUT /api/notes` - Update existing note
+- `GET /api/notes/[id]` - Get specific note
+- `DELETE /api/notes/[id]` - Delete note
+
+### 5.3 Environment Variables
+
+**Required .env Configuration:**
+```bash
+# Better Auth
+BETTER_AUTH_SECRET=your_secret_key_here
+BETTER_AUTH_URL=http://localhost:3000
+
+# Database
+DB_HOST=localhost
+DB_USER=root
+DB_PWD=your_password
+DB_NAME=write-it-down
+
+# Application
+BASE_URL=http://localhost:3000
+
+# AI Integration
+GEMINI_KEY=your_google_gemini_api_key
+```
+
+### 5.4 Deployment Guide
+
+**Development Setup:**
+1. `npm install --force` (per dependency conflicts)
+2. Configure .env variables
+3. Setup MySQL database
+4. Run migrations: `npm run migrate`
+5. Start development: `pnpm dev`
+
+**Production Deployment:**
+1. `pnpm build` - Build production bundle
+2. Configure production database
+3. Set environment variables
+4. `pnpm start` - Start production server
+
+### 5.5 Technology Stack Details
+
+**Frontend Dependencies:**
+- React 19.1.0 - UI library
+- Next.js 15.3.4 - Full-stack framework
+- TipTap 2.24.0 - Rich text editor
+- Tailwind CSS - Styling framework
+- shadcn/ui - Component library
+- Framer Motion - Animations
+
+**Backend Dependencies:**
+- mysql2 3.14.1 - Database connector
+- better-auth 1.2.12 - Authentication
+- @google/genai 0.7.0 - AI integration
+- uuid - ID generation
+- moment - Date manipulation

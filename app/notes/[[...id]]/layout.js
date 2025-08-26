@@ -12,7 +12,7 @@ export default async function DashboardLayout({children, params}){
             headers: await headers(), // pass the headers
         }); 
 
-        return fetch(process.env.URL+'/api/notes?user_id='+session.userId, {
+        return fetch(process.env.BASE_URL + '/api/notes?user_id='+session.userId, {
             method: "GET",
             cache: 'no-store' // Disable caching
         }).then(res => res.json());
