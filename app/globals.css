@@ -91,6 +91,9 @@ body {
   outline: none;
 }
 
+.editor-list{
+  margin-left: 1.75em;
+}
 ol.editor-list{
   list-style-type: decimal;
 }

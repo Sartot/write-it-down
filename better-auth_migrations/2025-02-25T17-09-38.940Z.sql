@@ -5,3 +5,5 @@ create table `session` (`id` varchar(36) not null primary key, `expiresAt` datet
 create table `account` (`id` varchar(36) not null primary key, `accountId` text not null, `providerId` text not null, `userId` varchar(36) not null references `user` (`id`), `accessToken` text, `refreshToken` text, `idToken` text, `accessTokenExpiresAt` datetime, `refreshTokenExpiresAt` datetime, `scope` text, `password` text, `createdAt` datetime not null, `updatedAt` datetime not null);
 
 create table `verification` (`id` varchar(36) not null primary key, `identifier` text not null, `value` text not null, `expiresAt` datetime not null, `createdAt` datetime, `updatedAt` datetime)
+
+CREATE TABLE `note` ( `id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL, `user_id` varchar(36) COLLATE utf8mb4_general_ci NOT NULL, `title` text COLLATE utf8mb4_general_ci, `content` longtext COLLATE utf8mb4_general_ci, `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP )

@@ -75,7 +75,6 @@ export default function TextEditor({ note, isLoading }) {
     const { scrollYProgress, scrollY } = useScroll();
 
     useMotionValueEvent(scrollY, "change", (latest) => {
-        console.log("Page scroll: ", latest);
         setIsScrolled(latest > 200);
     })
 
