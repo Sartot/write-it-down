@@ -176,7 +176,6 @@ Per funzionare il software sfrutta alcuni componenti essenziali:
 - FR-001.1: L'utente deve poter registrare un nuovo account con email e password
 - FR-001.2: L'utente deve poter autenticarsi con credenziali valide
 - FR-001.3: L'utente deve poter modificare email e password del proprio account
-- FR-001.4: Il sistema deve mantenere la sessione utente attiva per 30 giorni
 
 **FR-002: Gestione Note**
 - FR-002.1: L'utente deve poter creare una nuova nota con titolo e contenuto
@@ -240,11 +239,6 @@ Deadline di sviluppo: Agosto 2025.
 ## 4. Verification
 
 ### 4.1 Testing Strategy
-
-**Unit Testing:**
-- Copertura minima 80% per funzioni utility
-- Test per validation logic e data transformation
-- Mocking di servizi esterni (database, API AI)
 
 **Integration Testing:**
 - Test delle API routes con database reale
