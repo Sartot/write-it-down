@@ -1,33 +1,18 @@
 import { NextResponse, NextRequest } from 'next/server'
-import mysql from 'mysql2/promise'
+import { query } from '../../../lib/db'
 import { revalidateTag } from 'next/cache'
-
-
-let connectionParams =  {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PWD,
-    database: process.env.DB_NAME
-}
 
 
 export async function GET(request) {
   try {
-    const connection = await mysql.createConnection(connectionParams)
-
-    let get_exp_query = ''
-    get_exp_query = 'SELECT * FROM note where user_id = ?'
-
+    let get_exp_query = 'SELECT * FROM note WHERE user_id = $1'
     let user = request.nextUrl.searchParams.get("user_id");
-    // console.log(user);
-    let values = [user]
-    const [results] = await connection.execute(get_exp_query, values)
-    // console.log(results);
-    connection.end();
-
+    
+    const result = await query(get_exp_query, [user])
+    
     revalidateTag('notes-data');
 
-    return NextResponse.json(results)
+    return NextResponse.json(result.rows)
 
   } catch (err) {
     console.log('ERROR: API - ', err.message)
@@ -44,12 +29,9 @@ export async function GET(request) {
 
 export async function POST(request){
     try{
-        const connection = await mysql.createConnection(connectionParams);
-
         const req_body = await request.json();
-        await connection.execute("INSERT INTO note (user_id, id, title, content) VALUES (?, ?, ?, ?)", [req_body.user_id, req_body.id, req_body.title, req_body.content]);
+        await query("INSERT INTO note (user_id, id, title, content) VALUES ($1, $2, $3, $4)", [req_body.user_id, req_body.id, req_body.title, req_body.content]);
 
-        connection.end();
         const response = {
             returnedStatus: 201,
         }
@@ -72,7 +54,6 @@ export async function POST(request){
 
 export async function PUT(request){
     try{
-        const connection = await mysql.createConnection(connectionParams)
         const req_body = await request.json();
         const id = req_body.id;
         const title = req_body?.title;
@@ -81,19 +62,21 @@ export async function PUT(request){
 
         var fields = [];
         var values = [];
+        let paramIndex = 1;
+        
         if(title){
-            fields.push('title = ?');
+            fields.push(`title = $${paramIndex++}`);
             values.push(title);
         }
         if(content){
-            fields.push('content = ?');
+            fields.push(`content = $${paramIndex++}`);
             values.push(content);
         }
 
         values.push(updatedAt);
         values.push(id);
 
-        const result = await connection.execute("UPDATE note SET " + fields.join(", ") + ", updatedAt = ? where id = ?", values);
+        const result = await query(`UPDATE note SET ${fields.join(", ")}, updatedAt = $${paramIndex++} WHERE id = $${paramIndex}`, values);
         
         revalidateTag('notes-data');
         

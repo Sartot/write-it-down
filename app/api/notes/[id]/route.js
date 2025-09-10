@@ -1,35 +1,23 @@
 import { NextResponse, NextRequest } from 'next/server'
-import mysql from 'mysql2/promise'
+import { query } from '../../../../lib/db'
 import { revalidateTag } from 'next/cache'
-
-let connectionParams =  {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PWD,
-    database: process.env.DB_NAME
-}
 
 export async function GET(request, {params}){
     const { id } = await params;
 
-    const connection = await mysql.createConnection(connectionParams)
-    const [results] = await connection.execute("SELECT * FROM note where id = ?", [id])
+    const result = await query("SELECT * FROM note WHERE id = $1", [id])
 
-    return NextResponse.json({results}, {status: 200})
+    return NextResponse.json({results: result.rows}, {status: 200})
 }
 
 export async function DELETE(request, { params }) {
     try {
         const { id } = await params;
-
-        const connection = await mysql.createConnection(connectionParams);
         
         // Delete the note from the database
-        const [result] = await connection.execute("DELETE FROM note WHERE id = ?", [id]);
-        
-        await connection.end();
+        const result = await query("DELETE FROM note WHERE id = $1", [id]);
 
-        if (result.affectedRows === 0) {
+        if (result.rowCount === 0) {
             return NextResponse.json({ error: "Note not found" }, { status: 404 });
         }
 

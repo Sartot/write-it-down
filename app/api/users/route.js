@@ -1,28 +1,12 @@
 import { NextResponse, NextRequest } from 'next/server'
-import mysql from 'mysql2/promise'
-
-
-let connectionParams =  {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PWD,
-    database: process.env.DB_NAME
-}
-
+import { query } from '../../../lib/db'
 
 export async function GET(request) {
   try {
-    const connection = await mysql.createConnection(connectionParams)
+    let get_exp_query = 'SELECT * FROM "user"'
+    const result = await query(get_exp_query, [])
 
-    let get_exp_query = ''
-    get_exp_query = 'SELECT * FROM user'
-
-    let values = []
-    const [results] = await connection.execute(get_exp_query, values)
-
-    connection.end()
-
-    return NextResponse.json(results)
+    return NextResponse.json(result.rows)
 
   } catch (err) {
     console.log('ERROR: API - ', err.message)
