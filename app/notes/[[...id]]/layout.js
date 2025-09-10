@@ -1,7 +1,8 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/ui/app-sidebar";
-import { auth } from "@/lib/auth"
-import { headers } from 'next/headers'
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { getBaseUrl } from "@/lib/env";
 import { NotesProvider } from "@/contexts/NotesContext";
 
 export default async function DashboardLayout({children, params}){
@@ -12,7 +13,10 @@ export default async function DashboardLayout({children, params}){
             headers: await headers(), // pass the headers
         }); 
 
-        return fetch(process.env.BASE_URL + '/api/notes?user_id='+session.userId, {
+        // Determina l'URL base dinamicamente
+        const baseUrl = getBaseUrl();
+
+        return fetch(baseUrl + '/api/notes?user_id='+session.userId, {
             method: "GET",
             cache: 'no-store' // Disable caching
         }).then(res => res.json());
