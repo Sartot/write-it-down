@@ -9,7 +9,9 @@ import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import FileHandler from "@tiptap/extension-file-handler";
 import Image from '@tiptap/extension-image'
-import { ListItem, OrderedList, BulletList } from "@tiptap/extension-list";
+import ListItem from "@tiptap/extension-list-item";
+import OrderedList from "@tiptap/extension-ordered-list";
+import BulletList from "@tiptap/extension-bullet-list";
 
 import { useRef, useState, useEffect } from "react";
 import { authClient } from "@/lib/auth-client";

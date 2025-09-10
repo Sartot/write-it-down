@@ -24,7 +24,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { OrderedList } from "@tiptap/extension-list";
+import OrderedList from "@tiptap/extension-ordered-list";
 
 
 export default function EditorMenu({ editor, onDeleteNote }) {
